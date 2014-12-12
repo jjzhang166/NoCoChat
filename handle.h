@@ -7,6 +7,8 @@
 #include "config.h"
 #include <QRegExp>
 #include <QMap>
+#include <QStringList>
+#include <QDebug>
 
 class Handle : public QObject
 {
@@ -19,6 +21,8 @@ public:
     QMap<QString,QString> getCommand(QString command);
     //注册处理
     bool registered(QString userId,QString userName,QString pwd);
+    //登录处理
+    bool signin(QString userId,QString pwd);
 signals:
 
 public slots:

@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <QHostAddress>
-#include "tcpnet.h"
+#include "handle.h"
 #include <QMessageBox>
 #include <QTextCodec>
 
@@ -24,6 +24,7 @@ private slots:
 
 private:
     Ui::Signin *ui;
+    Handle handle;
 };
 
 #endif // SIGNIN_H

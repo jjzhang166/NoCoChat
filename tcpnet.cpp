@@ -71,3 +71,15 @@ void TcpNet::close()
 {
     tcpClient->close();
 }
+QString TcpNet::getLocalAddress()
+{
+       QHostInfo info = QHostInfo::fromName(QHostInfo::localHostName());
+       foreach(QHostAddress address,info.addresses())
+       {
+           if(address.protocol() == QAbstractSocket::IPv4Protocol)
+           {
+              return address.toString();
+           }
+       }
+    return "none";
+}

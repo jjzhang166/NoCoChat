@@ -27,19 +27,14 @@ void Signin::on_b_signin_clicked()
     /*
         验证模块——服务器验证
      */
-    TcpNet tcp;
-    QString ip="172.16.107.5"; 
-    tcp.tcpconnect(ip,8002);
-    QString command="<signin><userid:>"+ui->username->text()+"<password:>"+ui->password->text()+"<ip:>172.16.107.5<port:>7879";
-    command="[length="+QString::number(command.length())+"]"+command;
-    tcp.send(command);
-    if(true)
+
+    if(handle.registered(ui->username->text(),ui->username->text(),ui->password->text()))
     {
         /* while(tcp.isFlag())
         {
 
         }*/
-        QMessageBox::warning(this,"返回的内容",tcp.read());
+        QMessageBox::warning(this,"返回的内容","登录成功");
         accept();
         close();
 

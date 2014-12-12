@@ -8,18 +8,19 @@ Handle::Handle(QObject *parent) :
 }
 QString Handle::changeMessage(QString message)
 {
-    /*QString pattern="(?:\\[length=)(\\d+)(?:\\])";
+    QString pattern="(?:\\[length=)(\\d+)(?:\\])";
     QRegExp reg(pattern);
     //QString message="[length=32]<loginuser><userid:>用户名<name:>名称<password:>密码";
-    message.indexOf(reg);
-    reg.cap(1);
-    message.split(reg);*/
-    return message;
+    QStringList list=message.split(reg);
+    return list[1];
+
+
 
 }
 QMap<QString, QString> Handle::getCommand(QString command)
 {
     QString pattern="(?:<)([a-zA-Z0-9_\u4e00-\u9fa5\\w]+)(?::>)([a-zA-Z0-9_\u4e00-\u9fa5\\w]+)";
+     //QString message="[length=32]<loginuser><userid:>用户名<name:>名称<password:>密码";
     QRegExp reg(pattern);
     int i=0;
     QMap<QString,QString> map;
@@ -40,9 +41,8 @@ bool Handle::registered(QString userId, QString userName, QString pwd)
     command="[length="+QString::number(command.size())+"]"+command;
     tcp.tcpconnect(ip,port);
     tcp.send(command);
-    getCommand(tcp.read());
-    QString result ="2";
-    if(result=="1")
+    QMap<QString,QString>result=getCommand(changeMessage(tcp.read()));
+    if(result["type"]=="1")
     {
         return true;
     }
@@ -50,4 +50,8 @@ bool Handle::registered(QString userId, QString userName, QString pwd)
     {
         return false;
     }
+}
+bool Handle::signin(QString userId, QString pwd)
+{
+    QString command="<signin><userid:>"+userId+"<password:>"+pwd+"<ip:>"+tcp.getLocalAddress()+"<port:>端口";
 }
