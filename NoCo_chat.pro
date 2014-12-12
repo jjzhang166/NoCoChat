@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     udpnet.cpp \
     tcpnet.cpp \
     handle.cpp \
-    config.cpp
+    config.cpp \
+    chat.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -26,7 +27,8 @@ HEADERS  += \
     udpnet.h \
     tcpnet.h \
     handle.h \
-    config.h
+    config.h \
+    chat.h
 
 FORMS    += \
     mainwindow.ui \

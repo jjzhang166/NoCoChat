@@ -8,12 +8,12 @@ Handle::Handle(QObject *parent) :
 }
 QString Handle::changeMessage(QString message)
 {
-    QString pattern="(?:\\[length=)(\\d+)(?:\\])";
+    /*QString pattern="(?:\\[length=)(\\d+)(?:\\])";
     QRegExp reg(pattern);
     //QString message="[length=32]<loginuser><userid:>用户名<name:>名称<password:>密码";
-    qDebug()<<message.indexOf(reg);
-    qDebug()<<reg.cap(1);
-    qDebug()<<message.split(reg);
+    message.indexOf(reg);
+    reg.cap(1);
+    message.split(reg);*/
     return message;
 
 }
