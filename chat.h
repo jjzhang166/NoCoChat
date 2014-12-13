@@ -16,6 +16,7 @@ class Chat : public QDialog
     Q_OBJECT
 public:
     explicit Chat(QWidget *parent = 0);
+    ~Chat();
 
     QSplitter *splitter ;   // 分割主窗口
     QSplitter *Lsplitter ;  // 分割左边的窗口

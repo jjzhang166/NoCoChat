@@ -16,11 +16,17 @@ Chat::Chat(QWidget *parent) :
     alltext->resize(1000,550);
     inputtext->resize(500, 50);
     splitter->resize(500,400);
+    printf("no problem");
     setComponent();
     setSize();
     setConnect();
     setWindowOpacity(2);
     setAttribute(Qt::WA_TranslucentBackground);
+}
+
+Chat::~Chat()
+{
+
 }
 
 // 组件初始化

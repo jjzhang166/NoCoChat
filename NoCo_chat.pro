@@ -19,7 +19,9 @@ SOURCES += main.cpp \
     tcpnet.cpp \
     handle.cpp \
     config.cpp \
-    chat.cpp
+    chat.cpp \
+    addinfo.cpp \
+    login.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -28,8 +30,16 @@ HEADERS  += \
     tcpnet.h \
     handle.h \
     config.h \
-    chat.h
+    chat.h \
+    addinfo.h \
+    login.h
 
 FORMS    += \
     mainwindow.ui \
-    signin.ui
+    signin.ui \
+    addinfo.ui \
+    login.ui
+
+RESOURCES += \
+    images.qrc
+
