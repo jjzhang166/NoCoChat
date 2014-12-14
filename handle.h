@@ -16,6 +16,7 @@
 #include <QMap>
 #include <QStringList>
 #include <QDebug>
+#include <QList>
 class Handle : public QObject
 {
     Q_OBJECT
@@ -23,14 +24,19 @@ public:
     explicit Handle(QObject *parent = 0);
 //    信息提取
     QString  changeMessage(QString message);
-//    命令处理
-    QMap<QString,QString> getCommand(QString command);
+//    单协议处理
+    QMap<QString, QString> getCommand(QString command);
+//    多协议处理
+    QList<QMap<QString,QString> >getCommand(QString command,QString head);
 //    注册处理
     bool registered(QString userId,QString userName,QString pwd);
 //    创建聊天室
     bool creatTalkroom(QString userId, QString talkroomid, QString talkroomname);
 //    登录处理
     int signIn(QString userId, QString pwd,int port);
+//    获取好友列表
+    QList<QMap<QString, QString> > getUserList(QString userId);
+
 signals:
 
 public slots:

@@ -36,7 +36,7 @@ QString Handle::changeMessage(QString message)
 
 }
 /**
- * @brief 协议信息提取（提取协议中相关信息并保存）
+ * @brief 单协议信息提取（提取协议中相关信息并保存）
  * @param command 经过处理的信息
  * @return 一个key value集合对<信息名,信息>
  * 返回信息使用方法 QMap map=return 信息=map[信息名]
@@ -68,6 +68,26 @@ QMap<QString, QString> Handle::getCommand(QString command)
 //    返回结果集
     return map;
 
+}
+/**
+ * @brief 多协议处理函数
+ * @param command 多命令杂合
+ * @param head 第一个属性 例如：user（无需冒号）
+ * @return 一条指令为一个QMap 所有指令为一个QList
+ * 返回信息使用方法  QList<QString,QString> >=return QMap map QMap map= 信息=map[信息名]
+ */
+QList<QMap<QString,QString> > Handle::getCommand(QString command, QString head)
+{
+    QString pattern ="(?:<"+head+":>)";
+    QRegExp reg(pattern);
+    QStringList commands=command.split(reg);
+    QList<QMap<QString,QString> >result;
+    for(int i=1;i<commands.size();i++)
+    {
+        commands[i]=commands[0]+"<"+head+":>"+commands[i];
+        result.push_back(getCommand(commands[i]));
+    }
+    return result;
 }
 /**
  * @brief 注册处理函数（用于进行注册操作业务处理，并返回处理结果）
@@ -164,4 +184,25 @@ int Handle::signIn(QString userId, QString pwd,int port)
           }
     }
     return 3;
+}
+/**
+ * @brief 获取所有用户列表(用于添加好友)
+ * @param userId 当前用户的id
+ * @return 用户列表的集合
+ * API调用规范：返回的是一个QList<QMap<QString,QString>>对象。
+ * QMap key表：<userid:>用户名<name:>名字<sex:>性别<department:> 系别<major:>专业
+ */
+QList<QMap<QString,QString> > Handle::getUserList(QString userId)
+{
+//    拼接服务器请求协议
+    QString command="<getaddlist><userid:>"+userId;
+//     计算协议长度，添加协议头
+    command="[length="+QString::number(command.size())+"]"+command;
+//    连接服务器
+    tcp.tcpconnect(ip,port);
+//    发送协议
+    tcp.send(command);
+//    获取服务器返回的协议，并进行相关处理，取得结果集
+    QList<QMap<QString,QString> > result =getCommand(changeMessage(tcp.read()),"userid");
+    return result;
 }
