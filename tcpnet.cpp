@@ -71,3 +71,22 @@ void TcpNet::close()
 {
     tcpClient->close();
 }
+/**
+ * @brief 获取本地ip地址
+ * @return 返回ip地址
+ */
+QString TcpNet::getLocalAddress()
+{
+//     通过本机名获取本机网络信息
+     QHostInfo info = QHostInfo::fromName(QHostInfo::localHostName());
+//     通过遍历info对象找地与address对象相关的对象
+     foreach(QHostAddress address,info.addresses())
+     {
+//         当遍历查找到ipv4的ip地址时返回该本地ip地址
+        if(address.protocol() == QAbstractSocket::IPv4Protocol)
+        {
+                return address.toString();
+        }
+     }
+     return "notAddress";
+}

@@ -12,11 +12,11 @@ public:
     //发送消息
     void sendMessage(QString message);
     //接受消息
-    QString read();
+    QString acceptMessage();
     //设置ip和端口
     void setConfig(quint16 port, QString ip);
 private slots:
-    void acceptMessage();
+
 
 private:
    QUdpSocket *udpSocket;

@@ -5,6 +5,7 @@
 #include <QtNetwork/QTcpSocket>
 #include <QObject>
 #include <QEventLoop>
+#include <QHostInfo>
 
 class TcpNet :public QObject
 {
@@ -22,6 +23,8 @@ public:
     void close();
     //转换字节
     void command(QString common);
+    //获取本机ip地址
+    QString getLocalAddress();
 
 private slots:
     void readMessage();

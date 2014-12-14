@@ -4,7 +4,11 @@
 #include <QTextCodec.h>
 #include <QDebug>
 #include <QRegExp>
+<<<<<<< HEAD
 #include "chat.h"
+=======
+#include "tcpnet.h"
+>>>>>>> 39d927180629cdf477aec4edc05b9fcf3447ae2a
 
 int main(int argc, char *argv[])
 {
@@ -25,15 +29,5 @@ int main(int argc, char *argv[])
     Chat chat;
     chat.show();
     return a.exec();
-
-    /*
-    QString pattern="(?:\\[length=)(\\d+)(?:\\])";
-    QRegExp reg(pattern);
-    QString message="[length=32]<loginuser><userid:>用户名<name:>名称<password:>密码";
-    qDebug()<<message.indexOf(reg);
-    qDebug()<<reg.cap(1);
-    qDebug()<<message.split(reg);
-    return a.exec();
-    */
 
 }

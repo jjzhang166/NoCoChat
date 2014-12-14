@@ -4,7 +4,6 @@ UDPNet::UDPNet( )
 {
     udpSocket=new QUdpSocket();
     eventloop=new QEventLoop();
-    connect(udpSocket,SIGNAL(readyRead()),this,SLOT(acceptMessage()));
 }
 void UDPNet::setConfig(quint16 port, QString ip)
 {
@@ -30,18 +29,14 @@ void UDPNet::sendMessage(QString message)
   * @param ip 监听ip
   * @return 接收到的数据
   */
- void UDPNet::acceptMessage()
+ QString UDPNet::acceptMessage()
  {
       QHostAddress address;
       address.setAddress(ip);
       QByteArray accept;
       udpSocket->readDatagram(accept.data(),accept.size(),&address,&port);
       this->message=accept;
-      eventloop->exit();
+      return message;
 
  }
-QString UDPNet::read()
- {
-     eventloop->exec();
-     return message;
- }
+
