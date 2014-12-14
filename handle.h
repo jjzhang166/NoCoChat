@@ -27,9 +27,6 @@ public:
     QMap<QString,QString> getCommand(QString command);
 //    注册处理
     bool registered(QString userId,QString userName,QString pwd);
-//登录处理
-    bool signin(QString userId,QString pwd);
-
 //    创建聊天室
     bool creatTalkroom(QString userId, QString talkroomid, QString talkroomname);
 //    登录处理
