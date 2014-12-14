@@ -30,10 +30,7 @@ void Signin::on_b_signin_clicked()
 
     if(handle.registered(ui->username->text(),ui->username->text(),ui->password->text()))
     {
-        /* while(tcp.isFlag())
-        {
 
-        }*/
         QMessageBox::warning(this,"返回的内容","登录成功");
         accept();
         close();

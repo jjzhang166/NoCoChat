@@ -15,11 +15,7 @@
 #include <QRegExp>
 #include <QMap>
 #include <QStringList>
-<<<<<<< HEAD
 #include <QDebug>
-=======
->>>>>>> 94ca8d59868df8251ef3667d2b67764f3e7f1b0c
-
 class Handle : public QObject
 {
     Q_OBJECT
@@ -31,15 +27,13 @@ public:
     QMap<QString,QString> getCommand(QString command);
 //    注册处理
     bool registered(QString userId,QString userName,QString pwd);
-<<<<<<< HEAD
-    //登录处理
+//登录处理
     bool signin(QString userId,QString pwd);
-=======
+
 //    创建聊天室
     bool creatTalkroom(QString userId, QString talkroomid, QString talkroomname);
 //    登录处理
     int signIn(QString userId, QString pwd,int port);
->>>>>>> 94ca8d59868df8251ef3667d2b67764f3e7f1b0c
 signals:
 
 public slots:

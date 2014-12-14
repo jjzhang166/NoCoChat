@@ -71,19 +71,6 @@ void TcpNet::close()
 {
     tcpClient->close();
 }
-<<<<<<< HEAD
-QString TcpNet::getLocalAddress()
-{
-       QHostInfo info = QHostInfo::fromName(QHostInfo::localHostName());
-       foreach(QHostAddress address,info.addresses())
-       {
-           if(address.protocol() == QAbstractSocket::IPv4Protocol)
-           {
-              return address.toString();
-           }
-       }
-    return "none";
-=======
 /**
  * @brief 获取本地ip地址
  * @return 返回ip地址
@@ -102,5 +89,4 @@ QString TcpNet::getLocalAddress()
         }
      }
      return "notAddress";
->>>>>>> 94ca8d59868df8251ef3667d2b67764f3e7f1b0c
 }

@@ -23,15 +23,7 @@ Handle::Handle(QObject *parent) :
  */
 QString Handle::changeMessage(QString message)
 {
-<<<<<<< HEAD
-    QString pattern="(?:\\[length=)(\\d+)(?:\\])";
-    QRegExp reg(pattern);
-    //QString message="[length=32]<loginuser><userid:>用户名<name:>名称<password:>密码";
-    QStringList list=message.split(reg);
-    return list[1];
 
-
-=======
 //    正则规范:提取[length=15]中的15
     QString pattern="(?:\\[length=)(\\d+)(?:\\])";
 //    使用正则规范创建正则表达式对象
@@ -40,7 +32,7 @@ QString Handle::changeMessage(QString message)
     QStringList list=message.split(reg);
 //    返回相应的信息
     return list[1];
->>>>>>> 94ca8d59868df8251ef3667d2b67764f3e7f1b0c
+
 
 }
 /**
@@ -53,11 +45,9 @@ QMap<QString, QString> Handle::getCommand(QString command)
 {
 //    正则规范：提取<TYPE：>信息 中的TYPE和信息
     QString pattern="(?:<)([a-zA-Z0-9_\u4e00-\u9fa5\\w]+)(?::>)([a-zA-Z0-9_\u4e00-\u9fa5\\w]+)";
-<<<<<<< HEAD
-     //QString message="[length=32]<loginuser><userid:>用户名<name:>名称<password:>密码";
-=======
+//  QString message="[length=32]<loginuser><userid:>用户名<name:>名称<password:>密码";
+
 //        使用正则规范创建正则表达式对象
->>>>>>> 94ca8d59868df8251ef3667d2b67764f3e7f1b0c
     QRegExp reg(pattern);
 //    定义一个标志位，用于判断是否已到达字符串的末尾
     int i=0;
@@ -97,13 +87,10 @@ bool Handle::registered(QString userId, QString userName, QString pwd)
     tcp.tcpconnect(ip,port);
 //    发送协议
     tcp.send(command);
-<<<<<<< HEAD
-    QMap<QString,QString>result=getCommand(changeMessage(tcp.read()));
-=======
 //    获取服务器返回的协议，并进行相关处理，取得结果集
-    QMap result=getCommand(changeMessage(tcp.read()));
+    QMap<QString,QString>result=getCommand(changeMessage(tcp.read()));
+
 //    若返回的type字段值为1则注册成功，否则注册失败
->>>>>>> 94ca8d59868df8251ef3667d2b67764f3e7f1b0c
     if(result["type"]=="1")
     {
         return true;
@@ -113,11 +100,6 @@ bool Handle::registered(QString userId, QString userName, QString pwd)
         return false;
     }
 }
-<<<<<<< HEAD
-bool Handle::signin(QString userId, QString pwd)
-{
-    QString command="<signin><userid:>"+userId+"<password:>"+pwd+"<ip:>"+tcp.getLocalAddress()+"<port:>端口";
-=======
 /**
  * @brief 创建聊天室处理函数（用于进行创建聊天室操作业务处理，并返回处理结果）
  * @param userId 用户名的id 群主的id
@@ -137,7 +119,7 @@ bool Handle::creatTalkroom(QString userId, QString talkroomid, QString talkroomn
 //    发送协议
     tcp.send(command);
 //    获取服务器返回的协议，并进行相关处理，取得结果集
-    QMap result=getCommand(changeMessage(tcp.read()));
+    QMap<QString,QString> result=getCommand(changeMessage(tcp.read()));
 //    若返回的type字段值为1则注册成功，否则注册失败
     if(result["type"]=="1")
     {
@@ -167,7 +149,7 @@ int Handle::signIn(QString userId, QString pwd,int port)
 //    发送协议
     tcp.send(command);
 //    获取服务器返回的协议，并进行相关处理，取得结果集
-    QMap result=getCommand(changeMessage(tcp.read()));
+    QMap<QString,QString> result=getCommand(changeMessage(tcp.read()));
 //    若返回的type字段值为1则注册成功，否则注册失败
 //    遍历map
     QMap<QString,QString>::iterator it;
@@ -182,5 +164,4 @@ int Handle::signIn(QString userId, QString pwd,int port)
           }
     }
     return 3;
->>>>>>> 94ca8d59868df8251ef3667d2b67764f3e7f1b0c
 }
