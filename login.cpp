@@ -7,6 +7,10 @@ Login::Login(QWidget *parent) :
     ui(new Ui::Login)
 {
     ui->setupUi(this);
+    // 将窗口固定大小为 300*320 不可改变
+    setMinimumSize(300, 320);
+    setMaximumSize(300, 320);
+
     userInfo();
 }
 
@@ -25,8 +29,11 @@ void Login::userInfo()
 
 void Login::on_ok_clicked()
 {
+    // 判断两次输入的密码是否相同
     if (ui->pwd_1->text() == userpwd)
     {
+        // 两次输入的密码相同
+        // 鼗用户的注册信息提交于服务器，并用服务器响应的返回值是否注册成功
         if (handle.registered(userid,username,userpwd))
         {
             QMessageBox::about(this, "消息", "恭喜您，注册成功！") ;
@@ -39,6 +46,14 @@ void Login::on_ok_clicked()
             ui->pwd_1->setText("");
         }
     }else{
-        QMessageBox::about(this, "消息", "两次密码输入不一致")
+        QMessageBox::about(this, "消息", "两次密码输入不一致") ;
+        ui->pwd->setText("");
+        ui->pwd_1->setText("");
     }
+}
+
+// 点出取消按钮，退出本窗口
+void Login::on_cancel_clicked()
+{
+    this->exec();
 }

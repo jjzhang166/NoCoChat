@@ -22,6 +22,8 @@ public:
 private slots:
     void on_ok_clicked();
 
+    void on_cancel_clicked();
+
 private:
     Ui::Login *ui;
 
@@ -29,7 +31,6 @@ private:
     QString userid ;    // 帐号（ID）
     QString username ;  // 用户名（昵称）
     QString userpwd ;   // 密码
-    char sex ;  // 性别
 };
 
 #endif // LOGIN_H

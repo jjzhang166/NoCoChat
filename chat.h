@@ -34,6 +34,7 @@ public:
     void init() ;   // 对象初始函数
     void setComponent() ;   // 将各部件布局到窗口中
     void setSize() ;    // 设置窗口各部件大小
+    void sendInfo() ;
     void resizeEvent(QResizeEvent *);
 
     void setConnect() ;

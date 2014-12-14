@@ -4,23 +4,27 @@
 #include <QTextCodec.h>
 #include <QDebug>
 #include <QRegExp>
+#include "chat.h"
 
 int main(int argc, char *argv[])
 {
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("utf-8"));
     QApplication a(argc, argv);
-    MainWindow w_main;
-    Signin d_sign;
-    d_sign.show();
-    if(d_sign.exec()==QDialog::Accepted)
-    {
-        w_main.show();
-        return a.exec();
-    }
-    else
-    {
-       return 0;
-    }
+//    MainWindow w_main;
+//    Signin d_sign;
+//    d_sign.show();
+//    if(d_sign.exec()==QDialog::Accepted)
+//    {
+//        w_main.show();
+//        return a.exec();
+//    }
+//    else
+//    {
+//       return 0;
+//    }
+    Chat chat;
+    chat.show();
+    return a.exec();
 
     /*
     QString pattern="(?:\\[length=)(\\d+)(?:\\])";
