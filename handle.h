@@ -36,6 +36,20 @@ public:
     int signIn(QString userId, QString pwd,int port);
 //    获取好友列表
     QList<QMap<QString, QString> > getUserList(QString userId);
+//    获取聊天室列表
+     QList<QMap<QString,QString> >getRoomList(QString userid);
+//    添加好友
+    QMap<QString,QString> addFriend(QString userId, QString adduserid);
+//   创建聊天室
+    QMap<QString,QString> creatRoom(QString userId, QString roomId,QString roomName);
+//    获取所有好友列表
+    QList<QMap<QString,QString> >getFriendList(QString userid);
+//    获取聊天室成员列表
+     QList<QMap<QString,QString> >getRoomFriendList(QString userid,QString roomid);
+//     加入聊天室
+    QMap<QString,QString> addRoom(QString userId, QString roomId);
+
+
 
 signals:
 
