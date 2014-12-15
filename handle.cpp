@@ -239,7 +239,7 @@ QMap<QString,QString> Handle::addFriend(QString userId,QString adduserid)
 QList<QMap<QString,QString> >Handle::getFriendList(QString userid)
 {
             //    拼接服务器请求协议
-                QString command="<getmyuserfriend><fromuserid:>"+userId;
+                QString command="<getmyuserfriend><fromuserid:>"+userid;
             //     计算协议长度，添加协议头
                 command="[length="+QString::number(command.size())+"]"+command;
             //    连接服务器
@@ -260,7 +260,7 @@ QList<QMap<QString,QString> >Handle::getFriendList(QString userid)
 QList<QMap<QString,QString> >Handle::getRoomList(QString userid)
 {
             //    拼接服务器请求协议
-                QString command="<getmytalkroom><userid:>"+userId;
+                QString command="<getmytalkroom><userid:>"+userid;
             //     计算协议长度，添加协议头
                 command="[length="+QString::number(command.size())+"]"+command;
             //    连接服务器
@@ -347,12 +347,14 @@ QMap<QString,QString> Handle::addRoom(QString userId, QString roomId)
  * @brief 邀请某人加入聊天室
  * @param roomName 聊天室名字
  * @param roomId 聊天室id
- * @return QMap<QString,QString>
+ * @param friendId 被邀请人的id
+ * @param userId 登录用户id
+ * @return type: 0拒绝进入 1成功加入 2对方不在线 3未知错误,建议重试
  * 结构：
- * <talkroomid:>群id<talkroomname:>群名称<fromuserid:>申请者id<type:>0拒绝1同意
+ * <addtalkroomfriendback><fromid:>id（B）<fromname:>名称(B) <type:>1(同意) <ip:>ip<port:>port<talkroomid:>聊天室ID 或者<type:>0(不同意) <talkroomid:>聊天室ID
  * APi使用提示：不能保证QMap一定带有type，请使用者先判断QMap的大小
  */
-QMap<QString,QString> Handle::findRoom(QString friendId,QString userId,QString roomName, QString roomId)
+int Handle::requestFriendToRoom(QString friendId,QString userId,QString roomName, QString roomId)
 {
     //    拼接服务器请求协议
         QString command="<addtalkroomfriend><userid:>"+friendId+"<fromid:>"+userId+"<talkroomid:>"+roomId+"<talkroomname:>"+roomName;
@@ -364,5 +366,38 @@ QMap<QString,QString> Handle::findRoom(QString friendId,QString userId,QString r
         tcp.send(command);
     //    获取服务器返回的协议，并进行相关处理，取得结果集
         QMap<QString,QString>result=getCommand(changeMessage(tcp.read()));
-        return result;
+        QMap<QString,QString>::iterator it;
+        for(it=result.begin();it!=result.end();++it)
+        {
+            if(it.key()=="userId")
+            {
+                return 2;
+            }
+            else
+            {
+                if(it.key()=="type"&&it.value()=="0")
+                {
+                    return 0;
+                }
+                else if(it.key()=="type"&&it.value()=="1")
+                {
+                    return 1;
+                }
+            }
+        }
+        return 3;
+}
+void Handle::lamdownline(QString userId)
+{
+
+            //    拼接服务器请求协议
+                QString command="<Iamdownline><fromuserid:>"+userId;
+            //     计算协议长度，添加协议头
+                command="[length="+QString::number(command.size())+"]"+command;
+            //    连接服务器
+                tcp.tcpconnect(ip,port);
+            //    发送协议
+                tcp.send(command);
+            //    获取服务器返回的协议，并进行相关处理，取得结果集
+                tcp.read();
 }

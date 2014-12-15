@@ -48,6 +48,10 @@ public:
      QList<QMap<QString,QString> >getRoomFriendList(QString userid,QString roomid);
 //     加入聊天室
     QMap<QString,QString> addRoom(QString userId, QString roomId);
+//    添加好友进入聊天室
+    int requestFriendToRoom(QString friendId,QString userId,QString roomName, QString roomId);
+//    下线
+    void lamdownline(QString userId);
 
 
 
