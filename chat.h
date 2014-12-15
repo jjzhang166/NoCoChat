@@ -10,6 +10,7 @@
 #include <QResizeEvent>
 #include <QFont>
 #include <QFrame>
+#include <QDateTime>
 
 class Chat : public QDialog
 {
@@ -30,6 +31,7 @@ public:
     QPushButton *history ;  // 查看历史记录按钮
     QFont font ;    // 字体
     QFrame *frame ;
+    QDateTime time; // 用于获取当前系统时间的对象
 
     void init() ;   // 对象初始函数
     void setComponent() ;   // 将各部件布局到窗口中
@@ -44,6 +46,7 @@ signals:
 public slots:
     void setFont() ;    // 设置字体
     void showHistory(bool) ;    // 显示历史记录
+    void sendText() ;   // 发送聊天信息
 };
 
 #endif // CHAT_H

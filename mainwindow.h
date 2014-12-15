@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QString>
 
 
 
@@ -16,6 +17,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    QString username ;  // 用户昵称
+    QString userId ;    // 用户(帐号)ID
 
 private:
     Ui::MainWindow *ui;

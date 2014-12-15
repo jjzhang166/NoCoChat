@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setMaximumSize(255, 544);
     setMinimumSize(255, 544);
+
+    username = ui->user_name->text();
 }
 
 MainWindow::~MainWindow()

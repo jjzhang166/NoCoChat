@@ -45,7 +45,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="uername">
+   <widget class="QLabel" name="user_name">
     <property name="geometry">
      <rect>
       <x>94</x>
@@ -61,7 +61,7 @@
      <string notr="true">font: 10pt;</string>
     </property>
     <property name="text">
-     <string>用户名</string>
+     <string/>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -248,7 +248,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>306</width>
+         <width>253</width>
          <height>358</height>
         </rect>
        </property>
@@ -261,7 +261,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>254</width>
+         <width>253</width>
          <height>358</height>
         </rect>
        </property>
@@ -295,8 +295,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>98</width>
-         <height>28</height>
+         <width>257</width>
+         <height>400</height>
         </rect>
        </property>
        <attribute name="label">
