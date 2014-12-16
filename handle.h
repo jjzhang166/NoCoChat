@@ -52,7 +52,8 @@ public:
     int requestFriendToRoom(QString friendId,QString userId,QString roomName, QString roomId);
 //    下线
     void lamdownline(QString userId);
-
+//    登陆后预处理函数
+    int init();
 
 
 signals:

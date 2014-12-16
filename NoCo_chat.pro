@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     config.cpp \
     chat.cpp \
     addinfo.cpp \
-    login.cpp
+    login.cpp \
+    monitoring.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -32,7 +33,8 @@ HEADERS  += \
     config.h \
     chat.h \
     addinfo.h \
-    login.h
+    login.h \
+    monitoring.h
 
 FORMS    += \
     mainwindow.ui \
