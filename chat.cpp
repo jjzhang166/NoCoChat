@@ -129,7 +129,7 @@ void Chat::showHistory(bool ok)
 // 发送聊天信息，将聊天信息发送到聊天信息框，同时将信息发送给好友
 void Chat::sendText()
 {
-    QString nameid = name.username + "(" + id.userid + ")" ;
+    QString nameid = mainwindow.getUserName() + "(" + mainwindow.getUserId() + ")" ;
     time = QDateTime::currentDateTime();    // 获取系统当前时间
     QString timestr = time.toString("yyyy-MM-dd hh:mm:ss") ;    // 设置当前系统时间格式并转换成字符串形式
     QString inputstr = inputtext->toPlainText() ;   // 获取输入框的聊天信息

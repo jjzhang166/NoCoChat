@@ -23,6 +23,8 @@ public:
     QString userid ;    // 用户帐号
     QString pwd ;   // 用户密码
 
+    QString getUserId();
+
 private slots:
     void on_b_signin_clicked();
 

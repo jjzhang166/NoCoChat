@@ -155,7 +155,12 @@
      </property>
      <column>
       <property name="text">
-       <string/>
+       <string>ID</string>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
       </property>
      </column>
      <column>
@@ -170,7 +175,7 @@
      </column>
      <column>
       <property name="text">
-       <string>ID</string>
+       <string>性别</string>
       </property>
       <property name="font">
        <font>
@@ -180,12 +185,12 @@
      </column>
      <column>
       <property name="text">
-       <string>在线</string>
+       <string>系别</string>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
+     </column>
+     <column>
+      <property name="text">
+       <string>专业</string>
       </property>
      </column>
     </widget>
@@ -250,17 +255,12 @@
      </property>
      <column>
       <property name="text">
-       <string/>
+       <string>ID</string>
       </property>
      </column>
      <column>
       <property name="text">
        <string>群名称</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>ID</string>
       </property>
      </column>
     </widget>

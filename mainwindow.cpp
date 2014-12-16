@@ -11,9 +11,20 @@ MainWindow::MainWindow(QWidget *parent) :
     setMinimumSize(255, 544);
 
     username = ui->user_name->text();
+    userId = signin.getUserId();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+QString MainWindow::getUserName()
+{
+    return username;
+}
+
+QString MainWindow::getUserId()
+{
+    return userId ;
 }

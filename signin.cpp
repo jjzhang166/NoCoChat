@@ -51,3 +51,8 @@ void Signin::on_b_login_clicked()
     login->setModal(true);
     login->exec();
 }
+
+QString Signin::getUserId()
+{
+    return userid;
+}
