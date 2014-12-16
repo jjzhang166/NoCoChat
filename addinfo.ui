@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>555</width>
+    <width>499</width>
     <height>444</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>555</width>
+     <width>500</width>
      <height>444</height>
     </rect>
    </property>
@@ -141,12 +141,12 @@
       <string>查找</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="tableWidget">
+    <widget class="QTableWidget" name="friend_table">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>60</y>
-       <width>555</width>
+       <width>495</width>
        <height>360</height>
       </rect>
      </property>
@@ -171,16 +171,6 @@
      <column>
       <property name="text">
        <string>ID</string>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>性别</string>
       </property>
       <property name="font">
        <font>
@@ -249,18 +239,23 @@
       <string>查找</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="tableWidget_2">
+    <widget class="QTableWidget" name="group_table">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>52</y>
-       <width>555</width>
+       <width>495</width>
        <height>368</height>
       </rect>
      </property>
      <column>
       <property name="text">
-       <string>新建列</string>
+       <string/>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>群名称</string>
       </property>
      </column>
      <column>

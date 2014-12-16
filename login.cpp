@@ -22,6 +22,8 @@ Login::~Login()
 // 获取用户注册信息
 void Login::userInfo()
 {
+    ui->pwd->setEchoMode(QLineEdit::Password);      // 改变密码输入框的显示格式
+    ui->pwd_1->setEchoMode(QLineEdit::Password);
     userid = ui->user_id->text() ;  // 获取用户帐号（ID）
     username = ui->name->text() ;   // 获取用户名（昵称）
     userpwd = ui->pwd->text() ;     // 获取用户第一次输入的密码

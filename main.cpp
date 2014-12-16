@@ -4,11 +4,11 @@
 #include <QTextCodec.h>
 #include <QDebug>
 #include <QRegExp>
-<<<<<<< HEAD
-#include "chat.h"
-=======
+
+#include "addinfo.h"
+
 #include "tcpnet.h"
->>>>>>> 39d927180629cdf477aec4edc05b9fcf3447ae2a
+
 
 int main(int argc, char *argv[])
 {
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 //    {
 //       return 0;
 //    }
-    Chat chat;
+    AddInfo chat;
     chat.show();
     return a.exec();
 

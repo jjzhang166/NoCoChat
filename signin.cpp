@@ -1,6 +1,6 @@
 #include "signin.h"
 #include "ui_signin.h"
-
+#include "login.h"
 
 
 Signin::Signin(QWidget *parent) :
@@ -9,6 +9,9 @@ Signin::Signin(QWidget *parent) :
 {
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("utf8"));
     ui->setupUi(this);
+
+    userid = ui->user_id->text() ;
+    pwd = ui->password->text() ;
 }
 
 Signin::~Signin()
@@ -28,16 +31,23 @@ void Signin::on_b_signin_clicked()
         验证模块——服务器验证
      */
 
-    if(handle.registered(ui->username->text(),ui->username->text(),ui->password->text()))
-    {
+//    if(handle.signIn(userid, pwd, /*端口*/))
+//    {
 
-        QMessageBox::warning(this,"返回的内容","登录成功");
-        accept();
-        close();
+//        QMessageBox::about(this,"提示","登录成功！");
+//        accept();
+//        close();
 
-    }
-    else
-    {
-        QMessageBox::warning(this,"登录提示","密码或用户名错误");
-    }
+//    }
+//    else
+//    {
+//        QMessageBox::warning(this,"提示","密码或用户名错误！");
+//    }
+}
+
+void Signin::on_b_login_clicked()
+{
+    Login *login = new Login(this) ;
+    login->setModal(true);
+    login->exec();
 }
