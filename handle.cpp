@@ -387,6 +387,10 @@ int Handle::requestFriendToRoom(QString friendId,QString userId,QString roomName
         }
         return 3;
 }
+/**
+ * @brief 用户下线
+ * @param userId 登录用户id
+ */
 void Handle::lamdownline(QString userId)
 {
 
@@ -400,4 +404,13 @@ void Handle::lamdownline(QString userId)
                 tcp.send(command);
             //    获取服务器返回的协议，并进行相关处理，取得结果集
                 tcp.read();
+}
+/**
+ * @brief 程序运行时的初始化设置函数
+ * @return 绑定的端口号
+ * API使用指南：该函数可以作为窗口的实例化等初始化，只需添加引用参数即可
+ */
+int Handle::init()
+{
+    return udp.bindPort();
 }

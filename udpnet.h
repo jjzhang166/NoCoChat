@@ -3,7 +3,7 @@
 
 #include <QtNetwork/QUdpSocket>
 #include <QObject>
-#include <QEventLoop>
+
 
 class UDPNet:public QObject
 {
@@ -11,18 +11,21 @@ public:
     UDPNet();
     //发送消息
     void sendMessage(QString message);
-    //接受消息
-    QString acceptMessage();
+    //读取获取的信息
+    QString getMessage();
     //设置ip和端口
-    void setConfig(quint16 port, QString ip);
+    void setConfig(QString ip);
+    //绑定端口
+    int bindPort();
 private slots:
-
+    //接受消息
+    void acceptMessage();
 
 private:
    QUdpSocket *udpSocket;
    quint16 port;
    QString ip;
-   QEventLoop *eventloop;
+   //QEventLoop *eventloop;
    QString message;
 };
 
