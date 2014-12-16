@@ -10,7 +10,6 @@
 
 #include <QObject>
 #include "tcpnet.h"
-#include "udpnet.h"
 #include "config.h"
 #include <QRegExp>
 #include <QMap>
@@ -52,8 +51,6 @@ public:
     int requestFriendToRoom(QString friendId,QString userId,QString roomName, QString roomId);
 //    下线
     void lamdownline(QString userId);
-//    登陆后预处理函数
-    int init();
 
 
 signals:
@@ -65,8 +62,6 @@ private:
 protected:
 //    tcp对象
     TcpNet tcp;
-//   udp对象
-    UDPNet udp;
 //    配置文件对象
     Config config;
     QString ip;

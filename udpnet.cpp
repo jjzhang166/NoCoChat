@@ -1,9 +1,11 @@
 #include "udpnet.h"
 
-UDPNet::UDPNet( )
+UDPNet::UDPNet(QObject *parent) :
+    QObject(parent)
 {
-    udpSocket=new QUdpSocket();
-    connect(udpSocket,SIGNAL(readyRead()),this,SLOT(acceptMessage()));
+    udpReaction = new QUdpSocket();
+    udpAccepct  = new QUdpSocket();
+    connect(udpAccepct,SIGNAL(readyRead()),this,SLOT(acceptMessage()));
 }
 /**
  * @brief 设置udp协议的ip地址和端口
@@ -22,10 +24,10 @@ int UDPNet::bindPort()
 //    初始端口从10000开始
     int p=10000;
 //    直到端口能被绑定
-    while(udpSocket->bind(p,QUdpSocket::ShareAddress))
+    while(!(udpAccepct->bind(p,QUdpSocket::ShareAddress)))
     {
 //        步长为一
-        p++;
+          p++;
     }
 //    返回绑定的端口号
     this->port=p;
@@ -37,12 +39,24 @@ int UDPNet::bindPort()
  * @param ip 目标ip
  * @param message 发送信息
  */
+void UDPNet::sendMessage(QString message,int port)
+{
+    QByteArray byte=message.toAscii();
+    QHostAddress address;
+    address.setAddress(ip);
+    udpReaction->writeDatagram(byte.data(),message.size(),address,port);
+}
+/**
+ * @brief 发送消息
+ * @param ip 目标ip
+ * @param message 发送信息
+ */
 void UDPNet::sendMessage(QString message)
 {
     QByteArray byte=message.toAscii();
     QHostAddress address;
     address.setAddress(ip);
-    udpSocket->writeDatagram(byte.data(),message.size(),address,port);
+    udpReaction->writeDatagram(byte.data(),message.size(),address,port);
 }
 /**
   * @brief 接受消息
@@ -53,19 +67,12 @@ void UDPNet::sendMessage(QString message)
  void UDPNet::acceptMessage()
  {
      //拥有等待的数据报
-      while(udpSocket->hasPendingDatagrams()){
+      while(udpAccepct->hasPendingDatagrams()){
           QByteArray accept;
-          accept.resize(udpSocket->pendingDatagramSize());
-          udpSocket->readDatagram(accept.data(),accept.size());
+          accept.resize(udpAccepct->pendingDatagramSize());
+          udpAccepct->readDatagram(accept.data(),accept.size());
           this->message=accept;
        }
+      emit haveMessaeg(message);
 
  }
- /**
- * @brief 获取接收到的信息
- * @return 返回接收到的信息
- */
-QString UDPNet::getMessage()
-{
-    return message;
-}

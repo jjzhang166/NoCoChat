@@ -25,8 +25,8 @@ int main(int argc, char *argv[])
 //    {
 //       return 0;
 //    }
-    AddInfo chat;
-    chat.show();
+    MainWindow w;
+    w.show();
     return a.exec();
 
 }

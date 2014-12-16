@@ -1,31 +1,35 @@
 #ifndef UDPNET_H
 #define UDPNET_H
 
-#include <QtNetwork/QUdpSocket>
 #include <QObject>
+#include <QtNetwork/QUdpSocket>
+#include <QEventLoop>
+#include <QDebug>
 
-
-class UDPNet:public QObject
+class UDPNet : public QObject
 {
+    Q_OBJECT
 public:
-    UDPNet();
+    explicit UDPNet(QObject *parent = 0);
+    //发送消息
+    void sendMessage(QString message, int port);
     //发送消息
     void sendMessage(QString message);
-    //读取获取的信息
-    QString getMessage();
     //设置ip和端口
     void setConfig(QString ip);
     //绑定端口
     int bindPort();
-private slots:
+public slots:
     //接受消息
     void acceptMessage();
-
+signals:
+    void haveMessaeg(QString);
 private:
-   QUdpSocket *udpSocket;
+   QUdpSocket *udpAccepct;
+   QUdpSocket *udpReaction;
    quint16 port;
    QString ip;
-   //QEventLoop *eventloop;
+   QEventLoop eventloop;
    QString message;
 };
 

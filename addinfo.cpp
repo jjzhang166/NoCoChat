@@ -62,7 +62,7 @@ void AddInfo::setGroupTable()
 void AddInfo::printFriendInfo(QString name, QString id)
 {
     int i,j;
-    friendlist = handle.getFriendList(mainwindow.getUserId()) ;
+    friendlist = handle.getFriendList(userid) ;
     QString temp[]={"userid","name","sex", "department", "major"};
     // 插入一行
     int row = ui->friend_table->rowCount();
@@ -100,8 +100,8 @@ void AddInfo::printFriendInfo(QString name, QString id)
             }
         }
     }
-    ui->friend_table->insertRow(row);
-    ui->friend_table->setItem(0,0,new QTableWidgetItem(QString::number(sizeof(i)/sizeof(i[0]))));
+    //ui->friend_table->insertRow(row);
+    //ui->friend_table->setItem(0,0,new QTableWidgetItem(QString::number(sizeof(i)/sizeof(i[0]))));
 }
 
 // 将搜索群得到的信息放进表格中
