@@ -3,10 +3,11 @@
 
 #include <QMainWindow>
 #include <QString>
+#include "udpnet.h"
 #include "signin.h"
-#include "chat.h"
 #include "addinfo.h"
-
+#include "handle.h"
+#include <QDebug>
 
 
 namespace Ui {
@@ -21,18 +22,25 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    Signin signin;  // 实例化登录窗口对象
-    Chat chat;  // 实例化聊天窗口
-    AddInfo addinfo ;   // 实例化添加好友（聊天室（群））窗口对象
+    Signin signin;
 
-    QString username="";  // 用户昵称
-    QString userId="" ;  // 用户(帐号)ID
+    QString username ;  // 用户昵称
+    QString userId ;    // 用户(帐号)ID
 
-    QString getUserName();
-    QString getUserId();
+    QString getUserName();//获取用户名
+    QString getUserId();//获取用户id
+//    设置handle指针
+    void setHandle(Handle h);
+//    设置udp指针
+    void setUdp(UDPNet u);
 
+public slots:
+    void messageHandle(QString message);
 private:
     Ui::MainWindow *ui;
+    UDPNet *udp;
+    Handle *handle;
+    int port;
 };
 
 #endif // MAINWINDOW_H

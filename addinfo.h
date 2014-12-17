@@ -29,6 +29,7 @@ private slots:
     void on_friend_searchbtn_clicked(); // 查找好友
 
     void on_group_searchbtn_clicked();  // 查找聊天室（群）
+    void addFriendAction();
 
 private:
     Ui::AddInfo *ui;
@@ -40,6 +41,7 @@ private:
     QList<QMap<QString, QString> > grouplist ;  // 用于接收从服务器获取的聊天室（群）的信息
     int press_mouse_button; // 鼠标点击的按钮
     QMouseEvent *event;
+    QAction *addfriend;
 
     void setSize() ;    // 设置窗口各组件的大小
     void setFriendTable() ; // 设置好友添加表格
@@ -47,6 +49,7 @@ private:
     // 通过特定的用户名或帐号想找相应的用户信息并打印到表格中
     void printFriendInfo(QString name, QString id);
     void printGroupInfo(QString id);  // 将搜索群得到的信息放进表格中
+    void setConnection();
 
     Handle handle ; // 本对象用于获取好友和聊天室信息
 

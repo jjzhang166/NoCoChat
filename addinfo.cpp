@@ -7,6 +7,8 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QCursor>
+#include <QTableWidgetSelectionRange>
+#include <qdebug.h>
 
 AddInfo::AddInfo(QWidget *parent) :
     QDialog(parent),
@@ -20,6 +22,7 @@ AddInfo::AddInfo(QWidget *parent) :
     ui->friend_id->setText(NULL);
     ui->friend_name->setText(NULL);
     ui->group_id->setText(NULL);
+    setConnection();
 }
 
 AddInfo::~AddInfo()
@@ -52,6 +55,21 @@ void AddInfo::on_group_searchbtn_clicked()
 {
     groupid = ui->group_id->text();
     printGroupInfo(groupid);
+}
+
+void AddInfo::addFriendAction()
+{
+//    QList<QTableWidgetSelectionRange> ranges=ui->group_table->selectedRanges();
+//    int count=ranges.count();
+//    for(int i=0;i<count;i++)
+//    {
+//       int topRow=ranges.at(i).topRow();
+//       int bottomRow=ranges.at(i).bottomRow();
+//       for(int j=topRow;j<=bottomRow;j++)
+//       {
+//          qDebug()<<"selectRow"<<j;
+//        }
+//    }
 }
 
 // 设置对话框中各部的大小
@@ -199,6 +217,8 @@ void AddInfo::printGroupInfo(QString id)
     int row = ui->group_table->rowCount(); // 必须有此行代码才能新添一行表格
     ui->group_table->insertRow(row);
     ui->group_table->insertRow(row);
+    ui->group_table->setItem(0, 0, new QTableWidgetItem("1"));
+    ui->group_table->setItem(0, 1, new QTableWidgetItem("grouplist[i][temp[j]]"));
 //    if(id == NULL || id == "")
 //    {   // 当聊天室（群）帐号为空时，执行此分支
 //        for (i=0; i<grouplist.size(); i++)
@@ -233,6 +253,11 @@ void AddInfo::printGroupInfo(QString id)
 //            QMessageBox::about(this, "消息", "对不起，您所要查找的聊天室不存在！");
 //        }
 //    }
+
+}
+
+void AddInfo::setConnection()
+{
 
 }
 
@@ -286,9 +311,9 @@ void AddInfo::contextMenuEvent(QContextMenuEvent *)
 {
     QCursor cur = this->cursor();
     QMenu *menu = new QMenu(this);
-    menu->addAction("添加好友");
+    addfriend = menu->addAction("添加好友");
     menu->addAction("好友信息");
-    QAction *aa = menu->addAction("aa");
 
     menu->exec(cur.pos());
+    connect(addfriend, SIGNAL(clicked()), this, SLOT(addFriendAction()));
 }

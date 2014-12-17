@@ -40,6 +40,7 @@ QString Handle::changeMessage(QString message)
  * @param command 经过处理的信息
  * @return 一个key value集合对<信息名,信息>
  * 返回信息使用方法 QMap map=return 信息=map[信息名]
+ * API使用规范:key=command 返回该命令的类别 入login、register等
  */
 QMap<QString, QString> Handle::getCommand(QString command)
 {
@@ -65,6 +66,10 @@ QMap<QString, QString> Handle::getCommand(QString command)
 //        把查找到的key和value放进map<key,value>
         map.insert(reg.cap(1),reg.cap(2));
     }
+    QString pattern_1 ="";//"(?:<"+head+":>)";
+    QRegExp reg_1(pattern_1);
+    QStringList commands=command.split(reg_1);
+    map.insert("command",commands[0]);
 //    返回结果集
     return map;
 
@@ -404,13 +409,4 @@ void Handle::lamdownline(QString userId)
                 tcp.send(command);
             //    获取服务器返回的协议，并进行相关处理，取得结果集
                 tcp.read();
-}
-/**
- * @brief 程序运行时的初始化设置函数
- * @return 绑定的端口号
- * API使用指南：该函数可以作为窗口的实例化等初始化，只需添加引用参数即可
- */
-int Handle::init()
-{
-    return udp.bindPort();
 }
