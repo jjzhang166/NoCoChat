@@ -53,6 +53,8 @@ MainWindow::MainWindow(QWidget *parent) :
     {
        exit(0);
     }
+
+    setMyFriendBox();
 }
 
 MainWindow::~MainWindow()
@@ -220,4 +222,34 @@ void MainWindow::messageHandle(QString message)
     {
       reactionTalkRoom(reslut);
     }
+}
+
+/**
+ * @brief MainWindow::setMyFriendBox
+ */
+void MainWindow::setMyFriendBox()
+{
+    myfriendwidget = new QTableWidget;
+    myfriendwidget->verticalHeader()->setVisible(false);  // 隐藏表头
+    myfriendwidget->horizontalHeader()->setVisible(false);    // 隐藏行头
+
+    myfriendwidget->insertColumn(myfriendwidget->columnCount());    // 增加一列单元格
+    myfriendwidget->setColumnWidth(0, 252);     // 设置单元格的宽度为252
+
+    myfriendwidget->insertRow(myfriendwidget->rowCount());myfriendwidget->setRowHeight(0, 100);
+    QTableWidgetItem *it = new QTableWidgetItem( "张三");
+    myfriendwidget->setItem(0,0, it);
+    it->setIcon(QPixmap(":/img/Person.png"));
+    it->setIcon(QIcon(QSize(30,30)));
+    lay = new QVBoxLayout(ui->myfriend);
+    lay->addWidget(myfriendwidget); // 将一个表格放进我的好友抽屉中
+    lay->setMargin(0);  // 设置边距为0
+}
+
+/**
+ * @brief MainWindow::addMyFriend
+ */
+void MainWindow::addMyFriend()
+{
+    handle->getFriendList(userId);  // 获取所有的好友列表
 }

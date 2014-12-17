@@ -107,7 +107,10 @@ void AddInfo::setSize()
 
 }
 
-// 设置好友添加表格
+/**
+ * @brief AddInfo::setFriendTable
+ * 方法描述：设置好友添加表格的相关属性
+ */
 void AddInfo::setFriendTable()
 {
     // 设置好友添加表格各列的宽度
@@ -126,7 +129,10 @@ void AddInfo::setFriendTable()
     ui->friend_table->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
-// 设置群添加表格
+/**
+ * @brief AddInfo::setGroupTable
+ * 方法描述：设置聊天室（群）添加表格的相关属性
+ */
 void AddInfo::setGroupTable()
 {
     // 设置群添加表格各列的宽度
@@ -142,7 +148,12 @@ void AddInfo::setGroupTable()
     ui->group_table->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
- // 将搜索用户得到的信息放进表格中，通过特定的用户名或帐号想找相应的用户信息并打印到表格中
+/**
+ * @brief AddInfo::printFriendInfo
+ * @param name
+ * @param id
+ * 方法描述：将搜索用户得到的信息放进表格中，通过特定的用户名或帐号想找相应的用户信息并打印到表格中
+ */
 void AddInfo::printFriendInfo(QString name, QString id)
 {
     int i,j;
