@@ -31,18 +31,18 @@ void Signin::on_b_signin_clicked()
         验证模块——服务器验证
      */
 
-//    if(handle.signIn(userid, pwd, /*端口*/))
-//    {
+    if(handle.signIn(userid, pwd, 10/*端口*/))
+    {
 
-//        QMessageBox::about(this,"提示","登录成功！");
-//        accept();
-//        close();
+        QMessageBox::about(this,"提示","登录成功！");
+        accept();
+        close();
 
-//    }
-//    else
-//    {
-//        QMessageBox::warning(this,"提示","密码或用户名错误！");
-//    }
+    }
+    else
+    {
+        QMessageBox::warning(this,"提示","密码或用户名错误！");
+    }
 }
 
 void Signin::on_b_login_clicked()

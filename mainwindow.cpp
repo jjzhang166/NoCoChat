@@ -12,6 +12,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     username = ui->user_name->text();
     userId = signin.getUserId();
+    chat.setUserName(username);
+    chat.setUserId(userId);
+    addinfo.setUserName(username);
+    addinfo.setUserId(userId);
 }
 
 MainWindow::~MainWindow()
