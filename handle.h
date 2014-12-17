@@ -24,7 +24,7 @@ class Handle : public QObject
 public:
     explicit Handle(QObject *parent = 0);
 //    设置主窗口
-    void setWindow(QMainWindow m);
+    void setWindow(QMainWindow *m);
 //    信息提取
     QString  changeMessage(QString message);
 //    单协议处理
@@ -36,7 +36,7 @@ public:
 //    创建聊天室
     bool creatTalkroom(QString userId, QString talkroomid, QString talkroomname);
 //    登录处理
-    int signIn(QString userId, QString pwd,int port);
+    QString signIn(QString userId, QString pwd,int port);
 //    获取好友列表
     QList<QMap<QString, QString> > getUserList(QString userId);
 //    获取聊天室列表

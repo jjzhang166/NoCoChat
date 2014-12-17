@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QSystemTrayIcon>
 #include <QMessageBox>
+#include "signal.h"
 
 
 namespace Ui {
@@ -38,12 +39,6 @@ public:
     void reactionFriendRequest(QMap<QString,QString> command);
 //    创建托盘
     void creatTrayIcon();
-//    设置handle
-    void setHandle(Handle *h);
-//    设置Udp
-    void setUdp(UDPNet *u);
-//    设置端口
-    void setPort(int port);
 
 public slots:
     void messageHandle(QString message);
@@ -51,6 +46,7 @@ private:
     Ui::MainWindow *ui;
     UDPNet *udp;
     Handle *handle;
+    Signin sign;
     int port;
     QSystemTrayIcon *trayIcon;
 };
