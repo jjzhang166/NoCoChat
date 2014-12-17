@@ -9,32 +9,29 @@ MainWindow::MainWindow(QWidget *parent) :
     setMaximumSize(255, 544);
     setMinimumSize(255, 544);
     username = ui->user_name->text();
+    handle=new Handle();
     handle->setWindow(this);
+    udp=new UDPNet();
+    udp->bindPort();
+    connect(udp,SIGNAL(haveMessaeg(QString)),this,SLOT(messageHandle(QString)));
+    sign.setHandle(handle);
+    sign.setPort(port);
     sign.show();
     if(sign.exec()==QDialog::Accepted)
     {
+       userId=sign.getUserId();
+       username=sign.getUserName();
        show();
-
     }
     else
     {
-        close();
+       exit(0);
     }
-
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-void MainWindow::setHandle(Handle *h)
-{
-    this->handle=h;
-}
-void MainWindow::setUdp(UDPNet *u)
-{
-    connect(udp,SIGNAL(haveMessaeg(QString)),this,SLOT(messageHandle(QString)));
-    this->udp=u;
 }
 QString MainWindow::getUserName()
 {
@@ -52,10 +49,6 @@ void MainWindow::setHandle(Handle h)
 void MainWindow::setUdp(UDPNet u)
 {
     this->udp=&u;
-}
-void MainWindow::setPort(int port)
-{
-    this->port=port;
 }
 /**
  * @brief 回应邀请进入聊天室

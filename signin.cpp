@@ -30,21 +30,29 @@ void Signin::on_b_signin_clicked()
     /*
         验证模块——服务器验证
      */
-
-    if(handle.signIn(userid, pwd, 10/*端口*/))
+    QString result=handle->signIn(userid, pwd, port);
+    if(result=="1")
     {
 
-        QMessageBox::about(this,"提示","登录成功！");
-        accept();
-        close();
-
+       QMessageBox::warning(this,"提示","密码或用户名错误！");
+    }else if(result=="2"){
+        QMessageBox::warning(this,"提示","用户已占线");
+    }
+    else if(result=="3"){
+            QMessageBox::warning(this,"提示","未知错误");
     }
     else
     {
-        QMessageBox::warning(this,"提示","密码或用户名错误！");
+        QMessageBox::about(this,"提示","登录成功！");
+        userName=result;
+        accept();
+        close();
     }
 }
-
+void Signin::setHandle(Handle *h)
+{
+    handle=h;
+}
 void Signin::on_b_login_clicked()
 {
     Login *login = new Login(this) ;
@@ -55,4 +63,16 @@ void Signin::on_b_login_clicked()
 QString Signin::getUserId()
 {
     return userid;
+}
+int Signin::getPort()
+{
+    return port;
+}
+void Signin::setPort(int p)
+{
+    port=p;
+}
+QString Signin::getUserName()
+{
+    return userName;
 }

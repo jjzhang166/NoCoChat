@@ -36,7 +36,7 @@ public:
 //    创建聊天室
     bool creatTalkroom(QString userId, QString talkroomid, QString talkroomname);
 //    登录处理
-    int signIn(QString userId, QString pwd,int port);
+    QString signIn(QString userId, QString pwd,int port);
 //    获取好友列表
     QList<QMap<QString, QString> > getUserList(QString userId);
 //    获取聊天室列表

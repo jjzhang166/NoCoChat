@@ -163,7 +163,7 @@ bool Handle::creatTalkroom(QString userId, QString talkroomid, QString talkroomn
  * @return 返回是否登录成功 0登录成功 1用户名或密码错误 2已有用户登录 3未知错误
  * API调用规范：传入的所有参数应该已做编码处理(UTF-8)，函数不做任何编码处理，也不做任何的安全性处理。
  */
-int Handle::signIn(QString userId, QString pwd,int port)
+QString Handle::signIn(QString userId, QString pwd,int port)
 {
 //    拼接服务器请求协议
     QString command="<signin><userid:>"+userId+"<password:>"+pwd+"<ip:>"+tcp.getLocalAddress()+"<port:>端口"+QString::number(port);
@@ -181,14 +181,14 @@ int Handle::signIn(QString userId, QString pwd,int port)
     for ( it = result.begin(); it != result.end(); ++it ) {
           if(it.key()=="username")
           {
-              return 0;
+              return it.value();
           }
           else if(it.key()=="type")
           {
-              return it.value().toInt();
+              return it.value();
           }
     }
-    return 3;
+    return "3";
 }
 /**
  * @brief 获取所有用户列表(用于添加好友)

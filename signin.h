@@ -21,9 +21,19 @@ public:
     ~Signin();
 
     QString userid ;    // 用户帐号
+    QString userName; //用户昵称
     QString pwd ;   // 用户密码
 
+//    获取用户id
     QString getUserId();
+//    获取端口
+    int getPort();
+//    设置端口
+    void setPort(int p);
+//    返回用户名
+    QString getUserName();
+//    设置handle
+    void setHandle(Handle *h);
 
 private slots:
     void on_b_signin_clicked();
@@ -32,7 +42,8 @@ private slots:
 
 private:
     Ui::Signin *ui;
-    Handle handle;
+    Handle *handle;
+    int port;
 };
 
 #endif // SIGNIN_H
