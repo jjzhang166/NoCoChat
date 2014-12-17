@@ -222,7 +222,7 @@ void MainWindow::messageHandle(QString message)
              chat->show();
              chat->message(messages);
              chat->setflag(true);
-             list.append(&chat);
+             list.append(*chat);
         }
     }
  //        弹出系统窗口，询问是否添加某人为好友

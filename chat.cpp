@@ -5,7 +5,7 @@
 #include <QColor>
 
 Chat::Chat(QWidget *parent) :
-    QDialog(parent, Qt::FramelessWindowHint)
+    QWidget(parent)
 {
     init();
     resize(500, 400);

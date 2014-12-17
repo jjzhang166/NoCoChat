@@ -1,7 +1,7 @@
 #ifndef CHAT_H
 #define CHAT_H
 
-#include <QDialog>
+#include <QWidget>
 #include <QSplitter>
 #include <QTextEdit>
 #include <QLabel>
@@ -14,7 +14,7 @@
 #include "signin.h"
 #include "udpnet.h"
 
-class Chat : public QDialog
+class Chat : public QWidget
 {
     Q_OBJECT
 public:

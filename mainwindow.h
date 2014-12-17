@@ -16,6 +16,7 @@
 #include <QTableWidget>
 #include <QStringList>
 #include <QVBoxLayout>
+#include "chat.h"
 
 namespace Ui {
 class MainWindow;
@@ -63,7 +64,7 @@ private:
     QMenu *trayIconMenu;
     QTableWidget *myfriendwidget; // 用于放置所有好友
     QVBoxLayout *lay;
-
+    QList<Chat> list;
 
 };
 
