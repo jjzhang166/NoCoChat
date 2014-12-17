@@ -190,37 +190,60 @@ void MainWindow::reactionFriendRequest(QMap<QString,QString> command)
  */
 void MainWindow::messageHandle(QString message)
 {
-    QMap<QString,QString> reslut=handle->getCommand(handle->changeMessage(message));
-    QString command=reslut.value("command");
+    QMap<QString,QString> result=handle->getCommand(handle->changeMessage(message));
+    QString command=result.value("command");
 //        弹出系统窗口，询问是否进入聊天室
     if(command=="addtalkroomfriendyou")
     {
-        reactionTalkRoom(reslut);
+        reactionTalkRoom(result);
     }
 //        打开聊天窗口
     if(command=="chat")
     {
-        reactionTalkRoom(reslut);
+
+        QString messages="";
+        QStringList temp=result["value"].split('|');
+        for(int i=0;i<temp.size();i++)
+        {
+            temp[i]="<"+temp[i]+">";
+            messages+=temp[i];
+        }
+        bool f=true;
+        for(int i=0;i<list.size();i++)
+        {
+            if(list[i].getFriend()==result["userid"]){
+                list[i].message(messages);
+                f=false;
+            }
+        }
+        if(f){
+             Chat *chat=new Chat(this);
+             chat->setFriend(result["userid"]);
+             chat->show();
+             chat->message(messages);
+             chat->setflag(true);
+             list.append(&chat);
+        }
     }
  //        弹出系统窗口，询问是否添加某人为好友
     if(command=="addyou")
     {
-        reactionFriendRequest(reslut);
+        reactionFriendRequest(result);
     }
 //        弹出系统窗口，某人已下线，并把其项目置为enable（false）
     if(command=="youfrienddownline")
     {
-        reactionTalkRoom(reslut);
+        trayIcon->showMessage("好友下线","你的好友："+result["name"]+"已下线");
     }
 //        弹出系统窗口，某人已上线线，并把其项目置为enable（true）
     if(command=="youfriendsignin")
     {
-        reactionTalkRoom(reslut);
+        trayIcon->showMessage("好友上线","你的好友："+result["name"]+"已上线");
     }
 //        弹出系统窗口，某人进入群,并把其添加到群友列表
     if(command=="addtalkroomfriendback2")
     {
-      reactionTalkRoom(reslut);
+      reactionTalkRoom(result);
     }
 }
 

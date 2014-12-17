@@ -14,9 +14,8 @@
 #include <QTimer>
 #include <QMenu>
 #include <QTableWidget>
-#include <QTableWidgetItem>
+#include <QStringList>
 #include <QVBoxLayout>
-
 
 namespace Ui {
 class MainWindow;

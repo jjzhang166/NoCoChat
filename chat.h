@@ -12,6 +12,7 @@
 #include <QFrame>
 #include <QDateTime>
 #include "signin.h"
+#include "udpnet.h"
 
 class Chat : public QDialog
 {
@@ -46,9 +47,20 @@ public:
 
     void setConnect() ;
 
-signals:
+    void setUdp();
+    void message(QString msg);
+    void setFriend(QString friendid);
+    QString getFriend();
+    void setflag(bool flag);
+    bool getflag();
 
+signals:
+private:
+    UDPNet *udp;
+    QString friendId;
+    bool flag=false;
 public slots:
+
     void setFont() ;    // 设置字体
     void showHistory(bool) ;    // 显示历史记录
     void sendText() ;   // 发送聊天信息
