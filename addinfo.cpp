@@ -23,9 +23,14 @@ AddInfo::AddInfo(QWidget *parent) :
     ui->friend_name->setText(NULL);
     ui->group_id->setText(NULL);
     setConnection();
+    ui->friend_table->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->group_table->setContextMenuPolicy(Qt::CustomContextMenu);
-    menu = new QMenu(ui->group_table);
+    fmenu = new QMenu(ui->friend_table);
+    gmenu = new QMenu(ui->group_table);
     addfriend = new QAction("添加好友", this);
+    addgroup = new QAction("添加聊天室", this);
+    connect(addfriend, SIGNAL(triggered()), this, SLOT(addFriendAction()));
+    connect(addgroup, SIGNAL(triggered()), this, SLOT(addGroupAction()));
 }
 
 AddInfo::~AddInfo()
@@ -62,7 +67,7 @@ void AddInfo::on_group_searchbtn_clicked()
 
 void AddInfo::addFriendAction()
 {
-    QList<QTableWidgetSelectionRange> ranges=ui->group_table->selectedRanges();
+//    QList<QTableWidgetSelectionRange> ranges=ui->group_table->selectedRanges();
 //    int count=ranges.count();
 //    for(int i=0;i<count;i++)
 //    {
@@ -73,22 +78,21 @@ void AddInfo::addFriendAction()
 //          qDebug()<<"selectRow"<<j;
 //        }
 //    }
-    QList<QTableWidgetItem*> items=ui->group_table->selectedItems();
-    int count=items.count();
-    for(int i=0;i<count;i++)
-        {
-           int row=ui->group_table->row(items.at(i));//获取选中的行
-           QTableWidgetItem *item=items.at(i);
-           QString name=item->text();//获取内容
-           qDebug()<<name;
-        }
+    QMessageBox::about(this,"","");
+    QList<QTableWidgetItem*> items=ui->friend_table->selectedItems();
+    QTableWidgetItem *item=items.at(0);
+    QString adduserid=item->text();//获取内容
+    handle.addFriend(userid,adduserid);
 }
 
-void AddInfo::on_group_table(QPoint pos)
+void AddInfo::addGroupAction()
 {
-    menu->addAction(addfriend);
-    menu->exec(QCursor::pos());
+    QList<QTableWidgetItem*> items=ui->group_table->selectedItems();
+    QTableWidgetItem *item=items.at(0);
+    QString roomid=item->text();//获取内容
+    handle.addRoom(userid,roomid);
 }
+
 
 // 设置对话框中各部的大小
 void AddInfo::setSize()
@@ -231,48 +235,48 @@ void AddInfo::printGroupInfo(QString id)
 {
     int i,j ;
     // 通过本用户帐号获取所有聊天室（群）的列表
-//    grouplist = handle.getRoomList(userid);
-//    QString temp[]={"talkroomid", "talkroomname"};
+    grouplist = handle.getRoomList(userid);
+    QString temp[]={"talkroomid", "talkroomname"};
     // 插入一行
     int row = ui->group_table->rowCount(); // 必须有此行代码才能新添一行表格
     ui->group_table->insertRow(row);
     ui->group_table->insertRow(row);
     ui->group_table->setItem(0, 0, new QTableWidgetItem("1"));
     ui->group_table->setItem(0, 1, new QTableWidgetItem("grouplist[i][temp[j]]"));
-//    if(id == NULL || id == "")
-//    {   // 当聊天室（群）帐号为空时，执行此分支
-//        for (i=0; i<grouplist.size(); i++)
-//        {
-//            ui->group_table->insertRow(row);
-//            for(j=0; j<sizeof(temp); j++)
-//            {
-//                // 将用户信息输出到第 i 行，第 j 列单元格中
-//                ui->group_table->setItem(i, j, new QTableWidgetItem(grouplist[i][temp[j]]));
-//            }
-//        }
-//    }else if(id != NULL && id != ""){
-//        // 当聊天室（群）帐号不为空时，执行此分支
-//        int count = 0 ;
-//        // 遍历所有的信息，找到对应 id 的聊天室（群）并输出到表格中
-//        for(i=0;  i<grouplist.size(); i++)
-//        {
-//            if(grouplist[i][temp[0]] == id)
-//            {
-//                ui->group_table->insertRow(row);
-//                for(j=0; j<sizeof(temp); j++)
-//                {
-//                    // 将用户信息输出到第 i 行，第 j 列单元格中
-//                    ui->group_table->setItem(i, j, new QTableWidgetItem(grouplist[i][temp[j]]));
-//                    count++ ;
-//                }
-//            }
-//        }
-//        // 当查找的聊天室（群）不存在时，弹出一个消息框
-//        if (0 == count)
-//        {
-//            QMessageBox::about(this, "消息", "对不起，您所要查找的聊天室不存在！");
-//        }
-//    }
+    if(id == NULL || id == "")
+    {   // 当聊天室（群）帐号为空时，执行此分支
+        for (i=0; i<grouplist.size(); i++)
+        {
+            ui->group_table->insertRow(row);
+            for(j=0; j<sizeof(temp); j++)
+            {
+                // 将用户信息输出到第 i 行，第 j 列单元格中
+                ui->group_table->setItem(i, j, new QTableWidgetItem(grouplist[i][temp[j]]));
+            }
+        }
+    }else if(id != NULL && id != ""){
+        // 当聊天室（群）帐号不为空时，执行此分支
+        int count = 0 ;
+        // 遍历所有的信息，找到对应 id 的聊天室（群）并输出到表格中
+        for(i=0;  i<grouplist.size(); i++)
+        {
+            if(grouplist[i][temp[0]] == id)
+            {
+                ui->group_table->insertRow(row);
+                for(j=0; j<sizeof(temp); j++)
+                {
+                    // 将用户信息输出到第 i 行，第 j 列单元格中
+                    ui->group_table->setItem(i, j, new QTableWidgetItem(grouplist[i][temp[j]]));
+                    count++ ;
+                }
+            }
+        }
+        // 当查找的聊天室（群）不存在时，弹出一个消息框
+        if (0 == count)
+        {
+            QMessageBox::about(this, "消息", "对不起，您所要查找的聊天室不存在！");
+        }
+    }
 
 }
 
@@ -327,13 +331,28 @@ void AddInfo::mouseDoubleClickEvent(QMouseEvent *e)
 }
 
 // 右键菜单事件
-void AddInfo::contextMenuEvent(QContextMenuEvent *)
-{
-    QCursor cur = this->cursor();
-    QMenu *menu = new QMenu(this);
-    //addfriend = menu->addAction("添加好友");
-    menu->addAction("好友信息");
+//void AddInfo::contextMenuEvent(QContextMenuEvent *)
+//{
+//    QCursor cur = this->cursor();
+//    QMenu *menu = new QMenu(this);
+//    //addfriend = menu->addAction("添加好友");
+//    menu->addAction("");
 
-    menu->exec(cur.pos());
-    connect(addfriend, SIGNAL(clicked()), this, SLOT(addFriendAction()));
+//    menu->exec(cur.pos());
+//    connect(addfriend, SIGNAL(clicked()), this, SLOT(addFriendAction()));
+//}
+
+
+void AddInfo::on_friend_table_customContextMenuRequested(const QPoint &pos)
+{
+    fmenu->addAction(addfriend);
+    fmenu->addAction("好友信息");
+    fmenu->exec(QCursor::pos());
+}
+
+void AddInfo::on_group_table_customContextMenuRequested(const QPoint &pos)
+{
+    gmenu->addAction(addgroup);
+    gmenu->addAction("群信息");
+    gmenu->exec(QCursor::pos());
 }
