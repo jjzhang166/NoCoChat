@@ -1,6 +1,7 @@
 #include <QApplication>
 #include "mainwindow.h"
 #include <QTextCodec.h>
+#include "config.h"
 
 
 int main(int argc, char *argv[])

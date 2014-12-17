@@ -9,9 +9,6 @@ Signin::Signin(QWidget *parent) :
 {
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("utf8"));
     ui->setupUi(this);
-
-    userid = ui->user_id->text() ;
-    pwd = ui->password->text() ;
 }
 
 Signin::~Signin()
@@ -30,11 +27,13 @@ void Signin::on_b_signin_clicked()
     /*
         验证模块——服务器验证
      */
+    userid = ui->user_id->text() ;
+    pwd = ui->password->text() ;
     QString result=handle->signIn(userid, pwd, port);
     if(result=="1")
     {
-
        QMessageBox::warning(this,"提示","密码或用户名错误！");
+
     }else if(result=="2"){
         QMessageBox::warning(this,"提示","用户已占线");
     }

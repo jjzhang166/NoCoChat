@@ -8,20 +8,46 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setMaximumSize(255, 544);
     setMinimumSize(255, 544);
-    username = ui->user_name->text();
     handle=new Handle();
     handle->setWindow(this);
     udp=new UDPNet();
-    udp->bindPort();
+    port =udp->bindPort();
     connect(udp,SIGNAL(haveMessaeg(QString)),this,SLOT(messageHandle(QString)));
     sign.setHandle(handle);
     sign.setPort(port);
+    trayIcon=new QSystemTrayIcon(this);
+    trayIcon->setIcon(QIcon(":/img/SiseChat.png"));
+    trayIcon->setToolTip("NoCo_Chat,逗比做的聊天软件");//定义一个系统托盘图标并设置图标的提示语
+    trayIcon->show();
     sign.show();
+    //创建监听行为
+        QAction *minimizeAction = new QAction("最小化 (&I)", this);
+        connect(minimizeAction, SIGNAL(triggered()), this, SLOT(hide()));
+        QAction *restoreAction = new QAction("还原 (&R)", this);
+        connect(restoreAction, SIGNAL(triggered()), this, SLOT(showNormal()));
+        QAction *quitAction = new QAction("退出 (&Q)", this);
+        connect(quitAction, SIGNAL(triggered()), this, SLOT(exitWindow()));
+
+        //创建右键弹出菜单
+        trayIconMenu = new QMenu(this);
+        trayIconMenu->addAction(minimizeAction);
+        trayIconMenu->addAction(restoreAction);
+        trayIconMenu->addSeparator();
+        trayIconMenu->addAction(quitAction);
+        trayIcon->setContextMenu(trayIconMenu);
+    connect(trayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(Maction(QSystemTrayIcon::ActivationReason)));
     if(sign.exec()==QDialog::Accepted)
     {
        userId=sign.getUserId();
        username=sign.getUserName();
+       ui->user_name->setText(username);
+       times=new QTimer (this);
+       times->setSingleShot(false);//true 表示循环一次 表示循环无数次
+       times->setInterval(650);
+       connect(times,SIGNAL(timeout()),this,SLOT(changeico()));
        show();
+       trayIcon->showMessage("欢迎！","欢迎"+username+"你回来！");
+
     }
     else
     {
@@ -31,7 +57,64 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    handle->lamdownline(userId);
     delete ui;
+}
+void MainWindow::exitWindow()
+{
+    handle->lamdownline(userId);
+    exit(0);
+}
+void MainWindow::timeico()
+
+{
+
+    m=0;
+
+    times->start();
+
+}
+void MainWindow::changeico()
+
+{
+    m++;
+        if(m%2==0)
+
+        {
+
+            trayIcon->setIcon(QIcon(":/img/SiseChat.png"));
+        }
+
+        else
+
+        {
+             trayIcon->setIcon( QIcon() );
+        }
+
+}
+void MainWindow::Maction(QSystemTrayIcon::ActivationReason wch)
+
+{
+
+    switch(wch)
+
+    {
+
+            case QSystemTrayIcon::Trigger: times->stop();
+
+                     trayIcon->setIcon( QIcon(":/img/SiseChat.png") );break;//当用户单击时 我们让图标停止闪烁
+                     break;
+
+        case QSystemTrayIcon::DoubleClick:
+            //双击托盘图标
+            this->showNormal();
+            this->raise();
+            break;
+        default:
+            break;
+
+    }
+
 }
 QString MainWindow::getUserName()
 {

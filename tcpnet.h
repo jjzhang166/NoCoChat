@@ -6,6 +6,8 @@
 #include <QObject>
 #include <QEventLoop>
 #include <QHostInfo>
+#include <QTimer>
+#include <QDebug>
 
 class TcpNet :public QObject
 {
@@ -14,7 +16,7 @@ class TcpNet :public QObject
 public:
     explicit TcpNet();
     //TCP连接
-    bool tcpconnect(QString ip, quint16 port);
+    bool tcpconnect(QString ip, int port);
     //发送数据
     void send(QString common);
     //读取数据

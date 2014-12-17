@@ -12,21 +12,13 @@ TcpNet::TcpNet()
  * @param port 服务器端口
  * @return true or false
  */
-bool TcpNet::tcpconnect(QString ip, quint16 port)
+bool TcpNet::tcpconnect(QString ip, int port)
 {
     QHostAddress address;
     address.setAddress(ip);
     tcpClient->connectToHost(address,port);
-    if(!tcpClient->waitForConnected(5000))
-    {
-
-      return false;
-    }
-    else
-    {
-        return true;
-    }
-
+    qDebug()<<ip<<port;
+    return tcpClient->waitForConnected(5000);
 }
 /**
  * @brief 发送数据
@@ -43,6 +35,8 @@ void TcpNet::send(QString common)
 QString TcpNet::read()
 {
 
+  //将定时器超时信号与槽(功能函数)联系起来
+  QTimer::singleShot(2000, eventloop, SLOT(quit()));
   eventloop->exec();
   return read_info;
 }
@@ -52,6 +46,7 @@ QString TcpNet::read()
 void TcpNet::readMessage()
 {
     this->read_info=this->tcpClient->readAll();
+    this->tcpClient->close();
     eventloop->exit();
 }
 

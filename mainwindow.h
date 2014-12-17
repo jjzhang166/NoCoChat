@@ -11,6 +11,8 @@
 #include <QSystemTrayIcon>
 #include <QMessageBox>
 #include "signal.h"
+#include <QTimer>
+#include <QMenu>
 
 
 namespace Ui {
@@ -37,11 +39,14 @@ public:
     void reactionTalkRoom(QMap<QString,QString> command);
 //    好友申请
     void reactionFriendRequest(QMap<QString,QString> command);
-//    创建托盘
-    void creatTrayIcon();
+    void timeico();
+
 
 public slots:
+    void Maction(QSystemTrayIcon::ActivationReason wch);
     void messageHandle(QString message);
+    void changeico();
+    void exitWindow();
 private:
     Ui::MainWindow *ui;
     UDPNet *udp;
@@ -49,6 +54,10 @@ private:
     Signin sign;
     int port;
     QSystemTrayIcon *trayIcon;
+    QTimer *times;
+    int m;
+    QMenu *trayIconMenu;
+
 };
 
 #endif // MAINWINDOW_H

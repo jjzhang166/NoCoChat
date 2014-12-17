@@ -24,14 +24,14 @@ void Login::userInfo()
 {
     ui->pwd->setEchoMode(QLineEdit::Password);      // 改变密码输入框的显示格式
     ui->pwd_1->setEchoMode(QLineEdit::Password);
-    userid = ui->user_id->text() ;  // 获取用户帐号（ID）
-    username = ui->name->text() ;   // 获取用户名（昵称）
-    userpwd = ui->pwd->text() ;     // 获取用户第一次输入的密码
 }
 
 void Login::on_ok_clicked()
 {
     // 判断两次输入的密码是否相同
+    userid = ui->user_id->text() ;  // 获取用户帐号（ID）
+    username = ui->name->text() ;   // 获取用户名（昵称）
+    userpwd = ui->pwd->text() ;     // 获取用户第一次输入的密码
     if (ui->pwd_1->text() == userpwd)
     {
         // 两次输入的密码相同
