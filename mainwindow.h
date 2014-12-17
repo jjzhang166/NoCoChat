@@ -13,8 +13,9 @@
 #include "signal.h"
 #include <QTimer>
 #include <QMenu>
-#include "chat.h"
+#include <QTableWidget>
 #include <QStringList>
+#include <QVBoxLayout>
 
 namespace Ui {
 class MainWindow;
@@ -41,6 +42,8 @@ public:
 //    好友申请
     void reactionFriendRequest(QMap<QString,QString> command);
     void timeico();
+    void setMyFriendBox();  // 好友列表
+    void addMyFriend(); // 将好友放进“我的好友”抽屉列表中
 
 
 public slots:
@@ -58,7 +61,9 @@ private:
     QTimer *times;
     int m;
     QMenu *trayIconMenu;
-    QList<Chat>list;
+    QTableWidget *myfriendwidget; // 用于放置所有好友
+    QVBoxLayout *lay;
+
 
 };
 
