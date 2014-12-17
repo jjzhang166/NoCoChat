@@ -15,24 +15,24 @@ TEMPLATE = app
 SOURCES += main.cpp \
     mainwindow.cpp \
     signin.cpp \
+    udpnet.cpp \
     tcpnet.cpp \
     handle.cpp \
     config.cpp \
     chat.cpp \
     addinfo.cpp \
-    login.cpp \
-    udpnet.cpp
+    login.cpp
 
 HEADERS  += \
     mainwindow.h \
     signin.h \
+    udpnet.h \
     tcpnet.h \
     handle.h \
     config.h \
     chat.h \
     addinfo.h \
-    login.h \
-    udpnet.h
+    login.h
 
 FORMS    += \
     mainwindow.ui \

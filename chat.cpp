@@ -28,6 +28,18 @@ Chat::~Chat()
 
 }
 
+// 设置用户昵称
+void Chat::setUserName(QString name)
+{
+    username = name ;
+}
+
+// 设置用户帐号(ID)
+void Chat::setUserId(QString id)
+{
+    userid = id;
+}
+
 // 组件初始化
 void Chat::init()
 {
@@ -43,8 +55,6 @@ void Chat::init()
     history = new QPushButton(center) ; // 查看历史记录按钮
     frame = new QFrame;
     send = new QPushButton(frame) ;     // 聊天消息发送按钮
-
-
 }
 
 // 将各部件布局到窗口的函数
@@ -129,7 +139,7 @@ void Chat::showHistory(bool ok)
 // 发送聊天信息，将聊天信息发送到聊天信息框，同时将信息发送给好友
 void Chat::sendText()
 {
-    QString nameid = mainwindow.getUserName() + "(" + mainwindow.getUserId() + ")" ;
+    QString nameid = username + "(" + userid + ")" ;
     time = QDateTime::currentDateTime();    // 获取系统当前时间
     QString timestr = time.toString("yyyy-MM-dd hh:mm:ss") ;    // 设置当前系统时间格式并转换成字符串形式
     QString inputstr = inputtext->toPlainText() ;   // 获取输入框的聊天信息

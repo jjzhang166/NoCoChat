@@ -12,7 +12,6 @@
 #include <QFrame>
 #include <QDateTime>
 #include "signin.h"
-#include "mainwindow.h"
 
 class Chat : public QDialog
 {
@@ -21,6 +20,8 @@ public:
     explicit Chat(QWidget *parent = 0);
     ~Chat();
 
+    QString username ;
+    QString userid;
     QSplitter *splitter ;   // 分割主窗口
     QSplitter *Lsplitter ;  // 分割左边的窗口
     QSplitter *Rsplitter ;  // 分割右边的窗口
@@ -34,8 +35,9 @@ public:
     QFont font ;    // 字体
     QFrame *frame ;
     QDateTime time; // 用于获取当前系统时间的对象
-    MainWindow mainwindow ;   // // 用于获取本用户的用户名和用户帐号
 
+    void setUserName(QString name) ;    // 设置用户昵称
+    void setUserId(QString id); // 设置用户帐号(ID)
     void init() ;   // 对象初始函数
     void setComponent() ;   // 将各部件布局到窗口中
     void setSize() ;    // 设置窗口各部件大小

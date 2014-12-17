@@ -228,7 +228,7 @@
       <string notr="true">font: 12pt</string>
      </property>
      <property name="text">
-      <string>要sfds123</string>
+      <string/>
      </property>
     </widget>
     <widget class="QPushButton" name="group_searchbtn">
