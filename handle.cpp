@@ -66,7 +66,7 @@ QMap<QString, QString> Handle::getCommand(QString command)
 //        把查找到的key和value放进map<key,value>
         map.insert(reg.cap(1),reg.cap(2));
     }
-    QString command="<ashuodhihas><asdasd:>";
+
     QString pattern_1 ="(?:<)([a-zA-Z0-9_\u4e00-\u9fa5\\w]+)(?:>)";
     QRegExp reg_1(pattern_1);
     command.indexOf(reg_1);

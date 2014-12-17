@@ -9,6 +9,7 @@
 #include <QMap>
 #include <QMouseEvent>
 #include <QContextMenuEvent>
+#include <QPoint>
 
 namespace Ui {
 class AddInfo;
@@ -30,6 +31,7 @@ private slots:
 
     void on_group_searchbtn_clicked();  // 查找聊天室（群）
     void addFriendAction();
+    void on_group_table(QPoint pos);
 
 private:
     Ui::AddInfo *ui;
@@ -41,6 +43,7 @@ private:
     QList<QMap<QString, QString> > grouplist ;  // 用于接收从服务器获取的聊天室（群）的信息
     int press_mouse_button; // 鼠标点击的按钮
     QMouseEvent *event;
+    QMenu *menu;
     QAction *addfriend;
 
     void setSize() ;    // 设置窗口各组件的大小

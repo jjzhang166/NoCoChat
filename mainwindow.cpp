@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setMaximumSize(255, 544);
     setMinimumSize(255, 544);
     username = ui->user_name->text();
-    handle->setWindow(*this);
+    //handle->setWindow(this);
     connect(udp,SIGNAL(haveMessaeg(QString)),this,SLOT(messageHandle(QString)));
 
 }

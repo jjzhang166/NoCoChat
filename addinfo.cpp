@@ -23,6 +23,9 @@ AddInfo::AddInfo(QWidget *parent) :
     ui->friend_name->setText(NULL);
     ui->group_id->setText(NULL);
     setConnection();
+    ui->group_table->setContextMenuPolicy(Qt::CustomContextMenu);
+    menu = new QMenu(ui->group_table);
+    addfriend = new QAction("添加好友", this);
 }
 
 AddInfo::~AddInfo()
@@ -59,7 +62,7 @@ void AddInfo::on_group_searchbtn_clicked()
 
 void AddInfo::addFriendAction()
 {
-//    QList<QTableWidgetSelectionRange> ranges=ui->group_table->selectedRanges();
+    QList<QTableWidgetSelectionRange> ranges=ui->group_table->selectedRanges();
 //    int count=ranges.count();
 //    for(int i=0;i<count;i++)
 //    {
@@ -70,6 +73,21 @@ void AddInfo::addFriendAction()
 //          qDebug()<<"selectRow"<<j;
 //        }
 //    }
+    QList<QTableWidgetItem*> items=ui->group_table->selectedItems();
+    int count=items.count();
+    for(int i=0;i<count;i++)
+        {
+           int row=ui->group_table->row(items.at(i));//获取选中的行
+           QTableWidgetItem *item=items.at(i);
+           QString name=item->text();//获取内容
+           qDebug()<<name;
+        }
+}
+
+void AddInfo::on_group_table(QPoint pos)
+{
+    menu->addAction(addfriend);
+    menu->exec(QCursor::pos());
 }
 
 // 设置对话框中各部的大小
@@ -89,11 +107,12 @@ void AddInfo::setSize()
 void AddInfo::setFriendTable()
 {
     // 设置好友添加表格各列的宽度
-    ui->friend_table->setColumnWidth(0, 120);
+    ui->friend_table->setColumnWidth(0, 90);
     ui->friend_table->setColumnWidth(1, 100);
     ui->friend_table->setColumnWidth(2, 40);
-    ui->friend_table->setColumnWidth(3, 120);
-    ui->friend_table->setColumnWidth(4, 113);
+    ui->friend_table->setColumnWidth(3, 110);
+    ui->friend_table->setColumnWidth(4, 100);
+    ui->friend_table->setColumnWidth(5, 50);
 
     // 设置单元格不能被修改
     ui->friend_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -107,8 +126,9 @@ void AddInfo::setFriendTable()
 void AddInfo::setGroupTable()
 {
     // 设置群添加表格各列的宽度
-    ui->group_table->setColumnWidth(0, 220);
-    ui->group_table->setColumnWidth(1,273);
+    ui->group_table->setColumnWidth(0, 200);
+    ui->group_table->setColumnWidth(1,243);
+    ui->group_table->setColumnWidth(2,50);
 
     // 设置单元格不能被修改
     ui->group_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -311,7 +331,7 @@ void AddInfo::contextMenuEvent(QContextMenuEvent *)
 {
     QCursor cur = this->cursor();
     QMenu *menu = new QMenu(this);
-    addfriend = menu->addAction("添加好友");
+    //addfriend = menu->addAction("添加好友");
     menu->addAction("好友信息");
 
     menu->exec(cur.pos());
