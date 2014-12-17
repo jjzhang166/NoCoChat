@@ -5,6 +5,7 @@
 #include <QtNetwork/QUdpSocket>
 #include <QEventLoop>
 #include <QDebug>
+#include "config.h"
 
 class UDPNet : public QObject
 {
@@ -12,11 +13,9 @@ class UDPNet : public QObject
 public:
     explicit UDPNet(QObject *parent = 0);
     //发送消息
-    void sendMessage(QString message, int port);
+    void sendMessage(QString message, QString ip, int port);
     //发送消息
     void sendMessage(QString message);
-    //设置ip和端口
-    void setConfig(QString ip);
     //绑定端口
     int bindPort();
 public slots:
@@ -28,9 +27,9 @@ private:
    QUdpSocket *udpAccepct;
    QUdpSocket *udpReaction;
    quint16 port;
-   QString ip;
    QEventLoop eventloop;
    QString message;
+   Config config;
 };
 
 #endif // UDPNET_H

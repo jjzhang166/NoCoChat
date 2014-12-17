@@ -16,11 +16,15 @@
 #include <QStringList>
 #include <QDebug>
 #include <QList>
+#include <QMessageBox>
+#include "QMainWindow"
 class Handle : public QObject
 {
     Q_OBJECT
 public:
     explicit Handle(QObject *parent = 0);
+//    设置主窗口
+    void setWindow(QMainWindow m);
 //    信息提取
     QString  changeMessage(QString message);
 //    单协议处理
@@ -51,6 +55,8 @@ public:
     int requestFriendToRoom(QString friendId,QString userId,QString roomName, QString roomId);
 //    下线
     void lamdownline(QString userId);
+//离线好友申请信息的添加
+    QMap<QString,QString> reactionCacheRequest(QString userId);
 
 
 signals:
@@ -66,6 +72,7 @@ protected:
     Config config;
     QString ip;
     int port;
+    QMainWindow *window;
 
 };
 
