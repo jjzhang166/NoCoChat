@@ -216,10 +216,10 @@ void MainWindow::messageHandle(QString message)
         }
         if(f){
              Chat *chat=new Chat(this);
-             chat.setFriend(result["userid"]);
-             chat.show();
-             chat.message(messages);
-             chat.setflag(true);
+             chat->setFriend(result["userid"]);
+             chat->show();
+             chat->message(messages);
+             chat->setflag(true);
              list.append(&chat);
         }
     }
