@@ -8,6 +8,8 @@
 #include "addinfo.h"
 #include "handle.h"
 #include <QDebug>
+#include <QSystemTrayIcon>
+#include <QMessageBox>
 
 
 namespace Ui {
@@ -21,9 +23,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
-    Signin signin;
-
     QString username ;  // 用户昵称
     QString userId ;    // 用户(帐号)ID
 
@@ -33,6 +32,18 @@ public:
     void setHandle(Handle h);
 //    设置udp指针
     void setUdp(UDPNet u);
+//    聊天室邀请
+    void reactionTalkRoom(QMap<QString,QString> command);
+//    好友申请
+    void reactionFriendRequest(QMap<QString,QString> command);
+//    创建托盘
+    void creatTrayIcon();
+//    设置handle
+    void setHandle(Handle *h);
+//    设置Udp
+    void setUdp(UDPNet *u);
+//    设置端口
+    void setPort(int port);
 
 public slots:
     void messageHandle(QString message);
@@ -41,6 +52,7 @@ private:
     UDPNet *udp;
     Handle *handle;
     int port;
+    QSystemTrayIcon *trayIcon;
 };
 
 #endif // MAINWINDOW_H

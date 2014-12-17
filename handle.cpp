@@ -66,10 +66,11 @@ QMap<QString, QString> Handle::getCommand(QString command)
 //        把查找到的key和value放进map<key,value>
         map.insert(reg.cap(1),reg.cap(2));
     }
-    QString pattern_1 ="(?:<"+head+":>)";
+    QString command="<ashuodhihas><asdasd:>";
+    QString pattern_1 ="(?:<)([a-zA-Z0-9_\u4e00-\u9fa5\\w]+)(?:>)";
     QRegExp reg_1(pattern_1);
-    QStringList commands=command.split(reg_1);
-    map.insert("command",commands[0]);
+    command.indexOf(reg_1);
+    map.insert("command",reg_1.cap(1));
 //    返回结果集
     return map;
 
@@ -217,7 +218,9 @@ QList<QMap<QString,QString> > Handle::getUserList(QString userId)
  * @param adduserid 添加好友的用户id
  * @return QMap<QString,QString>
  * 结构：
- * <userId>请求方id<fromuserid>被请求方id<type>1(同意)或者<type>0(不同意)<ip:>ip<port>端口
+ * 好友在线：<adduserfriendback><userId>请求方id<fromuserid>被请求方id<type>1(同意)或者<type>0(不同意)<ip:>ip<port>端口
+ * 还有不在线：<unok><userId:>"+fuserId+"<name:>"+fname;请求< getfriendscache:><userid:>用户Id
+ * API提示：请使用QMap key="command" 判断返回的命令集
  */
 QMap<QString,QString> Handle::addFriend(QString userId,QString adduserid)
 {
@@ -409,4 +412,42 @@ void Handle::lamdownline(QString userId)
                 tcp.send(command);
             //    获取服务器返回的协议，并进行相关处理，取得结果集
                 tcp.read();
+}
+/**
+ * @brief 回应离线的好友添加信息
+ * @param userId 登录的好友号
+ * @return
+ * 返回的命令：
+ * <fromuserid:>用户名(A)<fromname:>名称(A)<ip:>ip<port:>port<type>是否同意加好友
+ */
+QMap<QString,QString> Handle::reactionCacheRequest(QString userId)
+{
+//     拼接服务器请求协议
+         QString command="< getfriendscache:><userid:>"+userId;
+//    计算协议长度，添加协议头
+         command="[length="+QString::number(command.size())+"]"+command;
+//    连接服务器
+         tcp.tcpconnect(ip,port);
+//    发送协议
+         tcp.send(command);
+//    获取服务器返回的协议，并进行相关处理，取得结果集
+         QMap<QString,QString>result=getCommand(changeMessage(tcp.read()));
+         QString text="用户："+result["fromname"]+"申请添加你为好友,请问是否同意？";
+         QString command_1="";
+         if(QMessageBox::question(window,"好友申请",text,QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
+         {
+             command_1="<adduserfriendback><userId:>"+result["fromuserid"]+"<fromuserid:>"+userId+"<type:>1";
+             result.insert("type","1");
+         }else{
+             command_1="<adduserfriendback><userId:>"+result["fromuserid"]+"<fromuserid:>"+userId+"<type:>0";
+             result.insert("type","0");
+         }
+        tcp.tcpconnect(ip,port);
+        tcp.send(command_1);
+        tcp.read();
+        return result;
+}
+void Handle::setWindow(QMainWindow m)
+{
+    this->window=&m;
 }

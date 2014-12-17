@@ -8,14 +8,6 @@ UDPNet::UDPNet(QObject *parent) :
     connect(udpAccepct,SIGNAL(readyRead()),this,SLOT(acceptMessage()));
 }
 /**
- * @brief 设置udp协议的ip地址和端口
- * @param ip ip地址
- */
-void UDPNet::setConfig(QString ip)
-{
-    this->ip=ip;
-}
-/**
  * @brief 获取一个空闲端口作为本次进程的通讯端口
  * @return 绑定是否成功
  */
@@ -31,6 +23,7 @@ int UDPNet::bindPort()
     }
 //    返回绑定的端口号
     this->port=p;
+    config.setValue("port_accepct",QString::number(port),"UDP");
     return p;
 }
 /**
@@ -39,7 +32,7 @@ int UDPNet::bindPort()
  * @param ip 目标ip
  * @param message 发送信息
  */
-void UDPNet::sendMessage(QString message,int port)
+void UDPNet::sendMessage(QString message,QString ip,int port)
 {
     QByteArray byte=message.toAscii();
     QHostAddress address;
@@ -47,7 +40,7 @@ void UDPNet::sendMessage(QString message,int port)
     udpReaction->writeDatagram(byte.data(),message.size(),address,port);
 }
 /**
- * @brief 发送消息
+ * @brief 发送消息(与服务器的udp通信)
  * @param ip 目标ip
  * @param message 发送信息
  */
@@ -55,8 +48,8 @@ void UDPNet::sendMessage(QString message)
 {
     QByteArray byte=message.toAscii();
     QHostAddress address;
-    address.setAddress(ip);
-    udpReaction->writeDatagram(byte.data(),message.size(),address,port);
+    address.setAddress(config.getValue("ip","TCP"));
+    udpReaction->writeDatagram(byte.data(),message.size(),address,config.getValue("port_reaction","UDP").toInt());
 }
 /**
   * @brief 接受消息

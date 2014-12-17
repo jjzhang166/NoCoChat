@@ -25,8 +25,14 @@ int main(int argc, char *argv[])
 //    {
 //       return 0;
 //    }
-    MainWindow w;
+    /*MainWindow w;
     w.show();
-    return a.exec();
+    return a.exec();*/
+    QString command="<ashuodhihas><asdasd:>";
+    QString pattern_1 ="(?:<)([a-zA-Z0-9_\u4e00-\u9fa5\\w]+)(?:>)";
+    QRegExp reg_1(pattern_1);
+    command.indexOf(reg_1);
+    qDebug()<<reg_1.cap(1);
+    return 0;
 
 }
