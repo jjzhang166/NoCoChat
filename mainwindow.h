@@ -13,7 +13,8 @@
 #include "signal.h"
 #include <QTimer>
 #include <QMenu>
-
+#include "chat.h"
+#include <QStringList>
 
 namespace Ui {
 class MainWindow;
@@ -57,6 +58,7 @@ private:
     QTimer *times;
     int m;
     QMenu *trayIconMenu;
+    QList<Chat>list;
 
 };
 

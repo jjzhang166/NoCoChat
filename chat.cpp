@@ -27,19 +27,40 @@ Chat::~Chat()
 {
 
 }
-
+void Chat::message(QString msg)
+{
+    alltext->append(msg);
+}
+void Chat::setUdp(UDPNet *u)
+{
+    udp=u;
+}
 // 设置用户昵称
 void Chat::setUserName(QString name)
 {
     username = name ;
 }
-
 // 设置用户帐号(ID)
 void Chat::setUserId(QString id)
 {
     userid = id;
 }
-
+QString Chat::getFriend()
+{
+    return this->friendId;
+}
+void Chat::setFriend(QString friendid)
+{
+    this->friendId=friendid;
+}
+bool Chat::getflag()
+{
+    return this->flag;
+}
+void Chat::setflag(bool flag)
+{
+    this->flag=flag;
+}
 // 组件初始化
 void Chat::init()
 {
@@ -161,5 +182,8 @@ void Chat::sendText()
             + "font font-family="+font.family()+"size="+QString::number(font.pointSize()) + "|"
             + inputstr + "|"
             + "/font" ;
+    QString command="<chat><userid:>"+userid+"<username:>"+username+"<value:>"+sendstr;
+    //     计算协议长度，添加协议头
+        command="[length="+QString::number(command.size())+"]"+command;
 
 }
