@@ -215,12 +215,12 @@ void MainWindow::messageHandle(QString message)
             }
         }
         if(f){
-             Chat *chat=new Chat(this);
-             chat->setFriend(result["userid"]);
-             chat->show();
-             chat->message(messages);
-             chat->setflag(true);
-             list.append(&chat);
+//             Chat *chat=new Chat(this);
+//             chat->setFriend(result["userid"]);
+//             chat->show();
+//             chat->message(messages);
+//             chat->setflag(true);
+//             list.append(*chat);
         }
     }
  //        弹出系统窗口，询问是否添加某人为好友

@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include <QTextCodec.h>
 #include "config.h"
+#include "chat.h"
 
 
 int main(int argc, char *argv[])
@@ -10,6 +11,5 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w_main;
     return a.exec();
-
 
 }

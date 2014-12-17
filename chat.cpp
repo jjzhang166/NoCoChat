@@ -1,12 +1,11 @@
 #include "chat.h"
-#include <QString>
-#include <QStyle>
-#include <QFontDialog>
-#include <QColor>
+#include "ui_chat.h"
 
 Chat::Chat(QWidget *parent) :
-    QDialog(parent, Qt::FramelessWindowHint)
+    QDialog(parent),
+    ui(new Ui::Chat)
 {
+    ui->setupUi(this);
     init();
     resize(500, 400);
     setMinimumSize(500, 400);   // 设置聊天窗口最小大小为500x400
@@ -25,7 +24,7 @@ Chat::Chat(QWidget *parent) :
 
 Chat::~Chat()
 {
-
+    delete ui;
 }
 void Chat::message(QString msg)
 {

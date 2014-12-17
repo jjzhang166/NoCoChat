@@ -1,6 +1,5 @@
 #ifndef CHAT_H
 #define CHAT_H
-
 #include <QDialog>
 #include <QSplitter>
 #include <QTextEdit>
@@ -11,16 +10,19 @@
 #include <QFont>
 #include <QFrame>
 #include <QDateTime>
-#include "signin.h"
 #include "udpnet.h"
+
+namespace Ui {
+class Chat;
+}
 
 class Chat : public QDialog
 {
     Q_OBJECT
+
 public:
     explicit Chat(QWidget *parent = 0);
     ~Chat();
-
     QString username ;
     QString userid;
     QSplitter *splitter ;   // 分割主窗口
@@ -56,6 +58,7 @@ public:
 
 signals:
 private:
+    Ui::Chat *ui;
     UDPNet *udp;
     QString friendId;
     bool flag=false;
@@ -64,6 +67,8 @@ public slots:
     void setFont() ;    // 设置字体
     void showHistory(bool) ;    // 显示历史记录
     void sendText() ;   // 发送聊天信息
+
+
 };
 
 #endif // CHAT_H
