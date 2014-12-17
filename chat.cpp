@@ -152,5 +152,14 @@ void Chat::sendText()
         alltext->append(str);
         inputtext->setText(NULL);
     }
+    /**
+     * 将聊天相关的信息都封装到字符串 sendstr 中
+     * 在此字符串中，“｜”将做为分割符，用于接收方以此分割此字符串
+     * 字符串内容为：发送方用户名和帐号 发送时间 ｜ 发送方输入内容的字体样式 ｜ 发送方的输入内容 ｜ 样式结束字符
+     */
+    QString sendstr = nameid + " " + timestr + "|"
+            + "font font-family="+font.family()+"size="+QString::number(font.pointSize()) + "|"
+            + inputstr + "|"
+            + "/font" ;
 
 }
