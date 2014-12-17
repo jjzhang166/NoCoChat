@@ -446,7 +446,7 @@ QMap<QString,QString> Handle::reactionCacheRequest(QString userId)
         tcp.read();
         return result;
 }
-void Handle::setWindow(QMainWindow m)
+void Handle::setWindow(QMainWindow *m)
 {
-    this->window=&m;
+    this->window=m;
 }

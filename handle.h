@@ -24,7 +24,7 @@ class Handle : public QObject
 public:
     explicit Handle(QObject *parent = 0);
 //    设置主窗口
-    void setWindow(QMainWindow m);
+    void setWindow(QMainWindow *m);
 //    信息提取
     QString  changeMessage(QString message);
 //    单协议处理

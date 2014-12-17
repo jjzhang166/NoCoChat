@@ -5,21 +5,21 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-   /*if(d_sign.exec()==QDialog::Accepted)
-   {
-           w_main.show();
-         return a.exec();
-   }
-   else
-       {
-            return 0;
-       }*/
     ui->setupUi(this);
     setMaximumSize(255, 544);
     setMinimumSize(255, 544);
     username = ui->user_name->text();
-    handle->setWindow(*this);
-    connect(udp,SIGNAL(haveMessaeg(QString)),this,SLOT(messageHandle(QString)));
+    handle->setWindow(this);
+    sign.show();
+    if(sign.exec()==QDialog::Accepted)
+    {
+       show();
+
+    }
+    else
+    {
+        close();
+    }
 
 }
 
@@ -33,6 +33,7 @@ void MainWindow::setHandle(Handle *h)
 }
 void MainWindow::setUdp(UDPNet *u)
 {
+    connect(udp,SIGNAL(haveMessaeg(QString)),this,SLOT(messageHandle(QString)));
     this->udp=u;
 }
 QString MainWindow::getUserName()
