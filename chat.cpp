@@ -1,11 +1,9 @@
 #include "chat.h"
-#include "ui_chat.h"
 
-Chat::Chat(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::Chat)
+Chat::Chat(QWidget *parent):
+    QWidget(parent)
+
 {
-    ui->setupUi(this);
     init();
     resize(500, 400);
     setMinimumSize(500, 400);   // 设置聊天窗口最小大小为500x400
@@ -24,7 +22,7 @@ Chat::Chat(QWidget *parent) :
 
 Chat::~Chat()
 {
-    delete ui;
+
 }
 void Chat::message(QString msg)
 {
@@ -155,7 +153,14 @@ void Chat::showHistory(bool ok)
 //        Rsplitter->resize(0,400);
 //    }
 }
-
+void Chat::setPort(int p)
+{
+    port=p;
+}
+void Chat::setIp(QString s)
+{
+    ip=s;
+}
 // 发送聊天信息，将聊天信息发送到聊天信息框，同时将信息发送给好友
 void Chat::sendText()
 {
@@ -184,5 +189,5 @@ void Chat::sendText()
     QString command="<chat><userid:>"+userid+"<username:>"+username+"<value:>"+sendstr;
     //     计算协议长度，添加协议头
         command="[length="+QString::number(command.size())+"]"+command;
-
+    udp->sendMessage(command,ip,port);
 }

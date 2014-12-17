@@ -39,8 +39,7 @@ FORMS    += \
     mainwindow.ui \
     signin.ui \
     addinfo.ui \
-    login.ui \
-    chat.ui
+    login.ui
 
 RESOURCES += \
     images.qrc

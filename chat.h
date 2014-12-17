@@ -1,6 +1,6 @@
 #ifndef CHAT_H
 #define CHAT_H
-#include <QDialog>
+#include <QWidget>
 #include <QSplitter>
 #include <QTextEdit>
 #include <QLabel>
@@ -11,17 +11,18 @@
 #include <QFrame>
 #include <QDateTime>
 #include "udpnet.h"
+#include <QFontDialog>
 
 namespace Ui {
 class Chat;
 }
 
-class Chat : public QDialog
+class Chat : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Chat(QWidget *parent = 0);
+    Chat(QWidget *parent = 0);  //explicit
     ~Chat();
     QString username ;
     QString userid;
@@ -49,19 +50,22 @@ public:
 
     void setConnect() ;
 
-    void setUdp();
+    void setUdp(UDPNet *u);
     void message(QString msg);
     void setFriend(QString friendid);
     QString getFriend();
     void setflag(bool flag);
     bool getflag();
+    void setPort(int p);
+    void setIp(QString s);
 
 signals:
 private:
-    Ui::Chat *ui;
     UDPNet *udp;
     QString friendId;
     bool flag=false;
+    int port;
+    QString ip;
 public slots:
 
     void setFont() ;    // 设置字体

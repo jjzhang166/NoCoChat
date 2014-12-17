@@ -208,23 +208,17 @@ void MainWindow::messageHandle(QString message)
             temp[i]="<"+temp[i]+">";
             messages+=temp[i];
         }
-        bool f=true;
-        for(int i=0;i<list.size();i++)
+        if(map.contains(result["userid"]))
         {
-            if(list[i].getFriend()==result["userid"]){
-                list[i].message(messages);
-                f=false;
-            }
+            map[result["userid"]]->message(messages);
+
+        }else{
+            Chat *chat=new Chat(this);
+            chat->message(messages);
+            map.insert(result["userid"],chat);
         }
-        if(f){
-//             Chat *chat=new Chat(this);
-//             chat->setFriend(result["userid"]);
-//             chat->show();
-//             chat->message(messages);
-//             chat->setflag(true);
-//             list.append(*chat);
-        }
-    }
+        map[result["userid"]]->show();
+}
  //        弹出系统窗口，询问是否添加某人为好友
     if(command=="addyou")
     {
@@ -275,4 +269,9 @@ void MainWindow::setMyFriendBox()
 void MainWindow::addMyFriend()
 {
     handle->getFriendList(userId);  // 获取所有的好友列表
+}
+
+void MainWindow::on_addfriend_clicked()
+{
+    AddInfo addinfo();
 }

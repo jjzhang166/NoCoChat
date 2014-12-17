@@ -10,12 +10,13 @@
 #include <QDebug>
 #include <QSystemTrayIcon>
 #include <QMessageBox>
-#include "signal.h"
 #include <QTimer>
 #include <QMenu>
 #include <QTableWidget>
 #include <QStringList>
 #include <QVBoxLayout>
+#include <QMap>
+#include "chat.h"
 
 namespace Ui {
 class MainWindow;
@@ -51,6 +52,9 @@ public slots:
     void messageHandle(QString message);
     void changeico();
     void exitWindow();
+private slots:
+    void on_addfriend_clicked();
+
 private:
     Ui::MainWindow *ui;
     UDPNet *udp;
@@ -63,6 +67,7 @@ private:
     QMenu *trayIconMenu;
     QTableWidget *myfriendwidget; // 用于放置所有好友
     QVBoxLayout *lay;
+    QMap<QString,Chat*> map;
 
 
 };
