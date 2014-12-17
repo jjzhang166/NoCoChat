@@ -1,11 +1,8 @@
 #include "chat.h"
-#include <QString>
-#include <QStyle>
-#include <QFontDialog>
-#include <QColor>
 
-Chat::Chat(QWidget *parent) :
+Chat::Chat(QWidget *parent):
     QWidget(parent)
+
 {
     init();
     resize(500, 400);
@@ -156,7 +153,14 @@ void Chat::showHistory(bool ok)
 //        Rsplitter->resize(0,400);
 //    }
 }
-
+void Chat::setPort(int p)
+{
+    port=p;
+}
+void Chat::setIp(QString s)
+{
+    ip=s;
+}
 // 发送聊天信息，将聊天信息发送到聊天信息框，同时将信息发送给好友
 void Chat::sendText()
 {
@@ -185,5 +189,5 @@ void Chat::sendText()
     QString command="<chat><userid:>"+userid+"<username:>"+username+"<value:>"+sendstr;
     //     计算协议长度，添加协议头
         command="[length="+QString::number(command.size())+"]"+command;
-
+    udp->sendMessage(command,ip,port);
 }
