@@ -10,7 +10,7 @@
 #include <QMouseEvent>
 #include <QContextMenuEvent>
 #include <QPoint>
-
+#include <QDebug>
 namespace Ui {
 class AddInfo;
 }
@@ -40,6 +40,7 @@ private:
 
     QString userid ;    // 用户帐号（ID）
     QString username ;  // 用户昵称
+    QString adduserid;  // 用于添加好友的id
     QString groupid ;   // 聊天室（群）的(ID)
     QList<QMap<QString, QString> > friendlist ; // 用于接收从服务器获取的好友信息
     QList<QMap<QString, QString> > grouplist ;  // 用于接收从服务器获取的聊天室（群）的信息

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QAbstractItemView>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -35,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
         trayIconMenu->addSeparator();
         trayIconMenu->addAction(quitAction);
         trayIcon->setContextMenu(trayIconMenu);
+        setMyFriendBox();
     connect(trayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(Maction(QSystemTrayIcon::ActivationReason)));
     if(sign.exec()==QDialog::Accepted)
     {
@@ -45,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
        times->setSingleShot(false);//true 表示循环一次 表示循环无数次
        times->setInterval(650);
        connect(times,SIGNAL(timeout()),this,SLOT(changeico()));
+       addMyFriend();
        show();
        trayIcon->showMessage("欢迎！","欢迎"+username+"你回来！");
 
@@ -54,7 +57,6 @@ MainWindow::MainWindow(QWidget *parent) :
        exit(0);
     }
 
-    setMyFriendBox();
 }
 
 MainWindow::~MainWindow()
@@ -214,6 +216,7 @@ void MainWindow::messageHandle(QString message)
 
         }else{
             Chat *chat=new Chat(this);
+            //chat->setIp();////////////////////////////////////////////////////////////////////////////////////////////
             chat->message(messages);
             map.insert(result["userid"],chat);
         }
@@ -252,14 +255,9 @@ void MainWindow::setMyFriendBox()
 
     myfriendwidget->insertColumn(myfriendwidget->columnCount());    // 增加一列单元格
     myfriendwidget->setColumnWidth(0, 252);     // 设置单元格的宽度为252
+    myfriendwidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    myfriendwidget->insertRow(myfriendwidget->rowCount());myfriendwidget->setRowHeight(0, 100);
-    QTableWidgetItem *it = new QTableWidgetItem( "张三");
-    myfriendwidget->setItem(0,0, it);
-    it->setIcon(QPixmap(":/img/Person.png"));
-    it->setIcon(QIcon(QSize(30,30)));
     lay = new QVBoxLayout(ui->myfriend);
-    lay->addWidget(myfriendwidget); // 将一个表格放进我的好友抽屉中
     lay->setMargin(0);  // 设置边距为0
 }
 
@@ -268,10 +266,24 @@ void MainWindow::setMyFriendBox()
  */
 void MainWindow::addMyFriend()
 {
-    handle->getFriendList(userId);  // 获取所有的好友列表
+    addmyfriendlist = handle->getFriendList(userId);  // 获取所有的好友列表
+    QString temp[]={"fuserId","fname"} ;
+    for (int i=0; i<addmyfriendlist.size(); i++)
+    {
+        myfriendwidget->insertRow(myfriendwidget->rowCount()); // 插入一行单元格
+        myfriendwidget->setRowHeight(i,50); // 设置单元格的高度为50
+        QTableWidgetItem *thisitem = new QTableWidgetItem(addmyfriendlist[i][temp[0]]+"\n"+addmyfriendlist[i][temp[1]]);
+        thisitem->setIcon(QPixmap(":/img/Person.png"));
+        myfriendwidget->setItem(i, 0, thisitem);
+        myfriendwidget->setIconSize(QSize(40,40));
+        lay->addWidget(myfriendwidget); // 将一个表格放进我的好友抽屉中
+    }
 }
 
 void MainWindow::on_addfriend_clicked()
 {
-    AddInfo addinfo();
+    AddInfo addinfo;
+    qDebug()<< userId;
+    addinfo.setUserId(userId);
+    addinfo.exec();
 }

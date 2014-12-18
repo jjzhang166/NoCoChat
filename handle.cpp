@@ -169,7 +169,7 @@ bool Handle::creatTalkroom(QString userId, QString talkroomid, QString talkroomn
  * @param userId 用户名的id 群主的id
  * @param pwd 用户密码
  * @param port(int) 程序开始时绑定的端口
- * @return 返回是否登录成功 username 登录成功 1用户名或密码错误 2已有用户登录 3未知错误
+ * @return 返回是否登录成功 username 登录成功 1 用户名或密码错误 2已有用户登录 3未知错误
  * API调用规范：传入的所有参数应该已做编码处理(UTF-8)，函数不做任何编码处理，也不做任何的安全性处理。
  */
 QString Handle::signIn(QString userId, QString pwd,int port)
@@ -186,10 +186,12 @@ QString Handle::signIn(QString userId, QString pwd,int port)
     QMap<QString,QString> result=getCommand(changeMessage(tcp.read()));
 //    若返回的type字段值为1则注册成功，否则注册失败
 //    遍历map
-        if(result["conmand"]=="signinresultunsuccessful")
+        if(result["command"]=="signinresultunsuccessful")
         {
+
             return result["type"];
         }else{
+
             return result["username"];
         }
     }else{
@@ -235,7 +237,7 @@ QMap<QString,QString> Handle::addFriend(QString userId,QString adduserid)
 {
     //    拼接服务器请求协议
    QMap<QString,QString> result;
-        QString command="adduserfriend><userid:>"+userId+"<fromuserid:>"+adduserid;
+        QString command="<adduserfriend><userid:>"+userId+"<fromuserid:>"+adduserid;
     //     计算协议长度，添加协议头
         command="[length="+QString::number(command.size())+"]"+command;
     //    连接服务器
@@ -262,6 +264,7 @@ QList<QMap<QString,QString> >Handle::getFriendList(QString userid)
             //    拼接服务器请求协议
     QList<QMap<QString,QString> > result;
                 QString command="<getmyuserfriend><fromuserid:>"+userid;
+                qDebug()<<userid;
             //     计算协议长度，添加协议头
                 command="[length="+QString::number(command.size())+"]"+command;
             //    连接服务器

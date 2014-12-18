@@ -53,9 +53,9 @@ void AddInfo::setUserId(QString id)
 // 好友查找按钮点击槽函数
 void AddInfo::on_friend_searchbtn_clicked()
 {
-    userid = ui->friend_id->text() ;    // 获取用户输入的帐号
+    adduserid = ui->friend_id->text() ;    // 获取用户输入的帐号
     username = ui->friend_name->text() ;    // 获取用户输入的昵称
-    printFriendInfo(username, userid);
+    printFriendInfo(username, adduserid);
 }
 
 // 聊天室（群）查找点击槽函数
@@ -157,17 +157,17 @@ void AddInfo::setGroupTable()
 void AddInfo::printFriendInfo(QString name, QString id)
 {
     int i,j;
-    friendlist = handle.getFriendList(userid) ;
+    friendlist = handle.getUserList(userid) ;
     QString temp[]={"userid","name","sex", "department", "major"};
     // 插入一行
     int row = ui->friend_table->rowCount(); // 必须有此行代码才能新添一行表格
-    if (name == NULL || name == "" || id == NULL || id == "")
+    if (name == NULL || name == " " || id == NULL || id == " ")
     {   // 当用户即不输入用户名也不输入帐号，或者输入的帐号和用户名都为空时运行此区域的代码
         // 遍历所有用户信息，并将用户信息输出到表格中
         for (i=0; i < friendlist.size(); i++)
         {
-            ui->friend_table->insertRow(row);
-            for (j=0; j<sizeof(temp); j++)
+            ui->friend_table->insertRow(ui->friend_table->rowCount());
+            for (j=0; j<5; j++)
             {
                 // 将用户信息输出到第 i 行，第 j 列单元格中
                 ui->friend_table->setItem(i, j, new QTableWidgetItem(friendlist[i][temp[j]]));
@@ -250,10 +250,6 @@ void AddInfo::printGroupInfo(QString id)
     QString temp[]={"talkroomid", "talkroomname"};
     // 插入一行
     int row = ui->group_table->rowCount(); // 必须有此行代码才能新添一行表格
-    ui->group_table->insertRow(row);
-    ui->group_table->insertRow(row);
-    ui->group_table->setItem(0, 0, new QTableWidgetItem("1"));
-    ui->group_table->setItem(0, 1, new QTableWidgetItem("grouplist[i][temp[j]]"));
     if(id == NULL || id == "")
     {   // 当聊天室（群）帐号为空时，执行此分支
         for (i=0; i<grouplist.size(); i++)

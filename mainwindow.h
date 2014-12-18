@@ -34,6 +34,7 @@ public:
 
     QString getUserName();//获取用户名
     QString getUserId();//获取用户id
+    QList<QMap<QString, QString> > addmyfriendlist; // 添加好友列表对象
 //    设置handle指针
     void setHandle(Handle h);
 //    设置udp指针

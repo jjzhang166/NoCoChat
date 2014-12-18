@@ -128,7 +128,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="iconSize">
      <size>
@@ -225,7 +225,7 @@
        <number>0</number>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="tabSpacing">
        <number>0</number>
@@ -261,8 +261,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>98</width>
-         <height>28</height>
+         <width>253</width>
+         <height>358</height>
         </rect>
        </property>
        <attribute name="label">
@@ -312,10 +312,10 @@
      <widget class="QPushButton" name="addfriend">
       <property name="geometry">
        <rect>
-        <x>27</x>
+        <x>17</x>
         <y>30</y>
-        <width>190</width>
-        <height>140</height>
+        <width>211</width>
+        <height>351</height>
        </rect>
       </property>
       <property name="font">
@@ -324,25 +324,7 @@
        </font>
       </property>
       <property name="text">
-       <string>添加好友</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="addgroup">
-      <property name="geometry">
-       <rect>
-        <x>27</x>
-        <y>190</y>
-        <width>190</width>
-        <height>140</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>34</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>添加群</string>
+       <string>各种添加</string>
       </property>
      </widget>
     </widget>
