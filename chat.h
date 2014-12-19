@@ -1,6 +1,6 @@
 #ifndef CHAT_H
 #define CHAT_H
-#include <QWidget>
+#include <QDialog>
 #include <QSplitter>
 #include <QTextEdit>
 #include <QLabel>
@@ -17,7 +17,7 @@ namespace Ui {
 class Chat;
 }
 
-class Chat : public QWidget
+class Chat : public QDialog
 {
     Q_OBJECT
 
@@ -26,6 +26,9 @@ public:
     ~Chat();
     QString username ;
     QString userid;
+    QString frienduserid ;
+    QString frienduserip ;
+    QString frienduserport ;
     QSplitter *splitter ;   // 分割主窗口
     QSplitter *Lsplitter ;  // 分割左边的窗口
     QSplitter *Rsplitter ;  // 分割右边的窗口
@@ -42,6 +45,9 @@ public:
 
     void setUserName(QString name) ;    // 设置用户昵称
     void setUserId(QString id); // 设置用户帐号(ID)
+    void setFriendUserId(QString fuserid) ;
+    void setFriendUserIp(QString fuserip) ;
+    void setFriendUserPort(QString fuserport) ;
     void init() ;   // 对象初始函数
     void setComponent() ;   // 将各部件布局到窗口中
     void setSize() ;    // 设置窗口各部件大小

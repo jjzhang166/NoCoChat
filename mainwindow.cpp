@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
     trayIcon->setToolTip("NoCo_Chat,逗比做的聊天软件");//定义一个系统托盘图标并设置图标的提示语
     trayIcon->show();
     sign.show();
+    myfriendwidget = new QTableWidget;
+    connect(myfriendwidget,SIGNAL(cellDoubleClicked(int,int)), this, SLOT(showChating(int,int)));
     //创建监听行为
         QAction *minimizeAction = new QAction("最小化 (&I)", this);
         connect(minimizeAction, SIGNAL(triggered()), this, SLOT(hide()));
@@ -249,13 +251,20 @@ void MainWindow::messageHandle(QString message)
  */
 void MainWindow::setMyFriendBox()
 {
-    myfriendwidget = new QTableWidget;
+
     myfriendwidget->verticalHeader()->setVisible(false);  // 隐藏表头
     myfriendwidget->horizontalHeader()->setVisible(false);    // 隐藏行头
 
     myfriendwidget->insertColumn(myfriendwidget->columnCount());    // 增加一列单元格
+    myfriendwidget->insertColumn(myfriendwidget->columnCount());    // 增加一列单元格
+    myfriendwidget->insertColumn(myfriendwidget->columnCount());    // 增加一列单元格
+    myfriendwidget->insertColumn(myfriendwidget->columnCount());    // 增加一列单元格
     myfriendwidget->setColumnWidth(0, 252);     // 设置单元格的宽度为252
-    myfriendwidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    myfriendwidget->setEditTriggers(QAbstractItemView::NoEditTriggers); // 设置表格不可编辑属性
+    myfriendwidget->setSelectionBehavior(QAbstractItemView::SelectRows);    //设置表格每次选中一行
+    myfriendwidget->hideColumn(1);  // 隐藏第二列
+    myfriendwidget->hideColumn(2);  // 隐藏第三列
+    myfriendwidget->hideColumn(3);  // 隐藏第四列
 
     lay = new QVBoxLayout(ui->myfriend);
     lay->setMargin(0);  // 设置边距为0
@@ -267,14 +276,20 @@ void MainWindow::setMyFriendBox()
 void MainWindow::addMyFriend()
 {
     addmyfriendlist = handle->getFriendList(userId);  // 获取所有的好友列表
-    QString temp[]={"fuserId","fname"} ;
+    QString temp[]={"fuserId","fname","ip", "port"} ;
     for (int i=0; i<addmyfriendlist.size(); i++)
     {
         myfriendwidget->insertRow(myfriendwidget->rowCount()); // 插入一行单元格
         myfriendwidget->setRowHeight(i,50); // 设置单元格的高度为50
-        QTableWidgetItem *thisitem = new QTableWidgetItem(addmyfriendlist[i][temp[0]]+"\n"+addmyfriendlist[i][temp[1]]);
-        thisitem->setIcon(QPixmap(":/img/Person.png"));
-        myfriendwidget->setItem(i, 0, thisitem);
+        QTableWidgetItem *nameiditem = new QTableWidgetItem(addmyfriendlist[i][temp[0]]+"\n"+addmyfriendlist[i][temp[1]]);
+        QTableWidgetItem *iditem = new QTableWidgetItem(addmyfriendlist[i][temp[0]]) ;
+        QTableWidgetItem *ipitem = new QTableWidgetItem(addmyfriendlist[i][temp[2]]) ;
+        QTableWidgetItem *portitem = new QTableWidgetItem(addmyfriendlist[i][temp[3]]) ;
+        nameiditem->setIcon(QPixmap(":/img/Person.png"));
+        myfriendwidget->setItem(i, 0, nameiditem);
+        myfriendwidget->setItem(i, 1, iditem);
+        myfriendwidget->setItem(i, 2, ipitem);
+        myfriendwidget->setItem(i, 3, portitem);
         myfriendwidget->setIconSize(QSize(40,40));
         lay->addWidget(myfriendwidget); // 将一个表格放进我的好友抽屉中
     }
@@ -286,4 +301,27 @@ void MainWindow::on_addfriend_clicked()
     qDebug()<< userId;
     addinfo.setUserId(userId);
     addinfo.exec();
+}
+
+void MainWindow::showChating(int row, int column)
+{
+//    QList<QTableWidgetItem*> items = myfriendwidget->selectedItems() ;
+//    QTableWidgetItem *item = items.at(1);
+    QString frienduserid = myfriendwidget->item(row, 1)->text() ;
+    QString frienduserip = myfriendwidget->item(row, 2)->text();
+    QString frienduserport = myfriendwidget->item(row, 3)->text() ;
+    Chat chat ;
+    chat.setFriendUserId(frienduserid);
+    chat.setFriendUserIp(frienduserip);
+    chat.setFriendUserPort(frienduserport);
+    qDebug()<< frienduserid;
+    qDebug()<< frienduserip;
+    qDebug()<<frienduserport;
+    chat.exec();
+
+}
+
+QMap<QString, QString> MainWindow::getFriendIp_Port(QString friendid)
+{
+
 }

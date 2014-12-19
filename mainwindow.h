@@ -46,6 +46,7 @@ public:
     void timeico();
     void setMyFriendBox();  // 好友列表
     void addMyFriend(); // 将好友放进“我的好友”抽屉列表中
+    QMap<QString, QString> getFriendIp_Port(QString friendid) ;
 
 
 public slots:
@@ -53,6 +54,7 @@ public slots:
     void messageHandle(QString message);
     void changeico();
     void exitWindow();
+    void showChating(int row, int column);  // 点击打开聊天窗口进行聊天槽函数,row=行，column=列
 private slots:
     void on_addfriend_clicked();
 

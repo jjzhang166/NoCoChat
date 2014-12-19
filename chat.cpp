@@ -1,7 +1,7 @@
 #include "chat.h"
 
 Chat::Chat(QWidget *parent):
-    QWidget(parent)
+    QDialog(parent)
 
 {
     init();
@@ -42,6 +42,25 @@ void Chat::setUserId(QString id)
 {
     userid = id;
 }
+
+// 要与之聊天好友的id
+void Chat::setFriendUserId(QString fuserid)
+{
+    frienduserid = fuserid ;
+}
+
+// 要与之聊天的好友的ip
+void Chat::setFriendUserIp(QString fuserip)
+{
+    frienduserip = fuserip ;
+}
+
+// 要与之聊天的好友的端口
+void Chat::setFriendUserPort(QString fuserport)
+{
+    frienduserport = fuserport ;
+}
+
 QString Chat::getFriend()
 {
     return this->friendId;
@@ -189,5 +208,10 @@ void Chat::sendText()
     QString command="<chat><userid:>"+userid+"<username:>"+username+"<value:>"+sendstr;
     //     计算协议长度，添加协议头
         command="[length="+QString::number(command.size())+"]"+command;
-    udp->sendMessage(command,ip,port);
+    if ("_empty_" == frienduserip && "0" == frienduserport)
+    {
+        bool ok;
+        port = frienduserport.toInt(&ok, 10) ;
+        udp->sendMessage(command,frienduserip,port);
+    }
 }

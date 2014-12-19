@@ -353,7 +353,6 @@ void AddInfo::mouseDoubleClickEvent(QMouseEvent *e)
 void AddInfo::on_friend_table_customContextMenuRequested(const QPoint &pos)
 {
     fmenu->addAction(addfriend);
-    fmenu->addAction("好友信息");
     fmenu->exec(QCursor::pos());
 }
 
