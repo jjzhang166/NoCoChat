@@ -17,6 +17,8 @@
 #include <QVBoxLayout>
 #include <QMap>
 #include "chat.h"
+#include <QThread>
+#include <QList>
 
 namespace Ui {
 class MainWindow;
