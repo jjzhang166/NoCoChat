@@ -45,7 +45,6 @@ QString Handle::changeMessage(QString message)
  */
 QMap<QString, QString> Handle::getCommand(QString command)
 {
-    qDebug()<<command;
 //    正则规范：提取<TYPE：>信息 中的TYPE和信息
     QString pattern="(?:<)([a-zA-Z0-9_\u4e00-\u9fa5\\w]+)(?::>)([a-zA-Z0-9_\u4e00-\u9fa5\\w\.]+)";
 //  QString message="[length=32]<loginuser><userid:>用户名<name:>名称<password:>密码";
@@ -73,7 +72,6 @@ QMap<QString, QString> Handle::getCommand(QString command)
     command.indexOf(reg_1);
     map.insert("command",reg_1.cap(1));
 //    返回结果集
-    qDebug()<<map;
     return map;
 
 }
