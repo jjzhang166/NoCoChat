@@ -12,7 +12,7 @@ Chat::Chat(QWidget *parent):
     splitter->setOpaqueResize(false);   // 设置为不透明
     alltext->resize(1000,550);
     inputtext->resize(500, 50);
-
+    setModal(false);
     printf("no problem");
     setComponent();
     setSize();
@@ -24,8 +24,9 @@ Chat::~Chat()
 {
 
 }
-void Chat::message(QString msg)
+void Chat::message(QString head,QString msg)
 {
+    alltext->append(head);
     alltext->append(msg);
 }
 void Chat::setUdp(UDPNet *u)

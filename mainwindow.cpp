@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     handle->setWindow(this);
     udp=new UDPNet();
     port =udp->bindPort();
-    connect(udp,SIGNAL(haveMessaeg(QString)),this,SLOT(messageHandle(QString)));
+
     sign.setHandle(handle);
     sign.setPort(port);
     trayIcon=new QSystemTrayIcon(this);
@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(trayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(Maction(QSystemTrayIcon::ActivationReason)));
     if(sign.exec()==QDialog::Accepted)
     {
+       connect(udp,SIGNAL(haveMessaeg(QString)),this,SLOT(messageHandle(QString)));
        userId=sign.getUserId();
        username=sign.getUserName();
        ui->user_name->setText(username);
@@ -195,6 +196,7 @@ void MainWindow::reactionFriendRequest(QMap<QString,QString> command)
  */
 void MainWindow::messageHandle(QString message)
 {
+    qDebug()<<message;
     QMap<QString,QString> result=handle->getCommand(handle->changeMessage(message));
     qDebug()<<result;
     QString command=result.value("command");
@@ -209,32 +211,33 @@ void MainWindow::messageHandle(QString message)
     {
 
 
-        QString messages="";
+        QString value="";
         QStringList temp=result["value"].split('|');
-        for(int i=0;i<temp.size();i++)
+        temp[1]="<"+temp[1]+">";
+        temp[3]="<"+temp[3]+">";
+        for(int i=1;i<temp.size();i++)
         {
-            temp[i]="<"+temp[i]+">";
-            messages+=temp[i];
+            value+=temp[i];
         }
         qDebug()<<map<<temp;
         if(map.contains(result["userid"]))
         {
-            map[result["userid"]]->message(messages);
             qDebug()<<"添加信息";
+            map[result["userid"]]->message(temp[0],value);
+            map[result["userid"]]->showNormal();
         }else{
             qDebug()<<"创建窗口";
-            Chat *chat=new Chat(this);
+            Chat *chat=new Chat();
             QMap<QString, QString> fipport = getFriendIp_Port(result["userid"]) ;
             chat->setIp(fipport["ip"]);
             chat->setPort(fipport["port"].toInt());
             chat->setUdp(udp);
-            chat->message(messages);
+            chat->message(temp[0],value);;
             map.insert(result["userid"],chat);
-            chat->exec();
-            map.remove(result["userid"]);
+            chat->showNormal();
             qDebug()<<"窗口被释放了";
         }
-        map[result["userid"]]->show();
+        //map.remove(result["userid"]);
 }
  //        弹出系统窗口，询问是否添加某人为好友
     if(command=="addyou")

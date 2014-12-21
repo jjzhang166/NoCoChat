@@ -57,7 +57,7 @@ public:
     void setConnect() ;
 
     void setUdp(UDPNet *u);
-    void message(QString msg);
+    void message(QString head, QString msg);
     void setFriend(QString friendid);
     QString getFriend();
     void setflag(bool flag);
