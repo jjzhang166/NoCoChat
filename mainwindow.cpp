@@ -177,6 +177,7 @@ void MainWindow::reactionFriendRequest(QMap<QString,QString> command)
     if(QMessageBox::question(this,"好友申请",text,QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes)==QMessageBox::Yes)
     {
             type="1";
+            addMyFriend();
     }else{
             type="0";
     }
@@ -201,6 +202,7 @@ void MainWindow::messageHandle(QString message)
     if(command=="addtalkroomfriendyou")
     {
         reactionTalkRoom(result);
+        addMyFriend();
     }
 //        打开聊天窗口
     if(command=="chat")
@@ -315,6 +317,7 @@ void MainWindow::on_addfriend_clicked()
     qDebug()<< userId;
     addinfo.setUserId(userId);
     addinfo.exec();
+    addMyFriend();
 }
 
 void MainWindow::showChating(int row, int column)

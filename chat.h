@@ -69,7 +69,6 @@ signals:
 private:
     UDPNet *udp;
     QString friendId;
-    bool flag=false;
     int port;
     QString ip;
 public slots:

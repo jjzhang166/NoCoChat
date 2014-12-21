@@ -37,6 +37,7 @@ void UDPNet::sendMessage(QString message,QString ip,int port)
     QByteArray byte=message.toAscii();
     QHostAddress address;
     address.setAddress(ip);
+    qDebug()<<message;
     udpReaction->writeDatagram(byte.data(),message.size(),address,port);
 }
 /**
