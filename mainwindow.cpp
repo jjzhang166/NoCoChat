@@ -195,6 +195,7 @@ void MainWindow::reactionFriendRequest(QMap<QString,QString> command)
 void MainWindow::messageHandle(QString message)
 {
     QMap<QString,QString> result=handle->getCommand(handle->changeMessage(message));
+    qDebug()<<result;
     QString command=result.value("command");
 //        弹出系统窗口，询问是否进入聊天室
     if(command=="addtalkroomfriendyou")
