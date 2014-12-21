@@ -205,6 +205,7 @@ void MainWindow::messageHandle(QString message)
     if(command=="chat")
     {
 
+        qDebug()<<map;
         QString messages="";
         QStringList temp=result["value"].split('|');
         for(int i=0;i<temp.size();i++)
@@ -234,11 +235,13 @@ void MainWindow::messageHandle(QString message)
 //        弹出系统窗口，某人已下线，并把其项目置为enable（false）
     if(command=="youfrienddownline")
     {
+        addMyFriend();
         trayIcon->showMessage("好友下线","你的好友："+result["name"]+"已下线");
     }
 //        弹出系统窗口，某人已上线线，并把其项目置为enable（true）
     if(command=="youfriendsignin")
     {
+        addMyFriend();
         trayIcon->showMessage("好友上线","你的好友："+result["name"]+"已上线");
     }
 //        弹出系统窗口，某人进入群,并把其添加到群友列表
@@ -277,6 +280,7 @@ void MainWindow::setMyFriendBox()
  */
 void MainWindow::addMyFriend()
 {
+    addmyfriendlist.clear();
     addmyfriendlist = handle->getFriendList(userId);  // 获取所有的好友列表
     QString temp[]={"fuserId","fname","ip", "port"} ;
     for (int i=0; i<addmyfriendlist.size(); i++)
