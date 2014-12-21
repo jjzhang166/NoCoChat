@@ -35,7 +35,7 @@ public:
     QDialog *center ;   // 聊天窗口中间工具栏区域
     QTextEdit *alltext ;    // 所有聊天内容显示区域
     QTextEdit *inputtext ;  // 本地信息输入区域
-    QTextEdit *historytext ;
+    QTextEdit *historytext ;    // 历史记录
     QPushButton *send ;     // 发送聊天信息按钮
     QPushButton *fontbtn ;  // 切换字体按钮
     QPushButton *history ;  // 查看历史记录按钮
