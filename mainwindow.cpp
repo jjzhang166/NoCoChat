@@ -335,22 +335,22 @@ void MainWindow::showChating(int row, int column)
     QString frienduserid = myfriendwidget->item(row, 1)->text() ;
     QString frienduserip = myfriendwidget->item(row, 2)->text();
     QString frienduserport = myfriendwidget->item(row, 3)->text() ;
-    Chat chat;
-    chat.setUserName(username);
-    chat.setUserId(userId);
-    chat.setUdp(udp);
-    chat.setFriendUserId(frienduserid);
-    chat.setFriendUserIp(frienduserip);
-    chat.setFriendUserPort(frienduserport);
+    Chat *chat = new Chat;
+    chat->setUserName(username);
+    chat->setUserId(userId);
+    chat->setUdp(udp);
+    chat->setFriendUserId(frienduserid);
+    chat->setFriendUserIp(frienduserip);
+    chat->setFriendUserPort(frienduserport);
     qDebug()<< frienduserid;
     qDebug()<< frienduserip;
     qDebug()<<frienduserport;
     if(!map.contains(frienduserid))
     {
-        map.insert(frienduserid,&chat);
+        map.insert(frienduserid,chat);
     }
-    chat.exec();
-    map.remove(frienduserid);
+    chat->showNormal();
+
 }
 
 /**
