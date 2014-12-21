@@ -208,7 +208,7 @@ void MainWindow::messageHandle(QString message)
     if(command=="chat")
     {
 
-        qDebug()<<map;
+
         QString messages="";
         QStringList temp=result["value"].split('|');
         for(int i=0;i<temp.size();i++)
@@ -216,11 +216,13 @@ void MainWindow::messageHandle(QString message)
             temp[i]="<"+temp[i]+">";
             messages+=temp[i];
         }
+        qDebug()<<map<<temp;
         if(map.contains(result["userid"]))
         {
             map[result["userid"]]->message(messages);
-
+            qDebug()<<"添加信息";
         }else{
+            qDebug()<<"创建窗口";
             Chat *chat=new Chat(this);
             QMap<QString, QString> fipport = getFriendIp_Port(result["userid"]) ;
             chat->setIp(fipport["ip"]);
@@ -228,6 +230,9 @@ void MainWindow::messageHandle(QString message)
             chat->setUdp(udp);
             chat->message(messages);
             map.insert(result["userid"],chat);
+            chat->exec();
+            map.remove(result["userid"]);
+            qDebug()<<"窗口被释放了";
         }
         map[result["userid"]]->show();
 }
@@ -337,9 +342,12 @@ void MainWindow::showChating(int row, int column)
     qDebug()<< frienduserid;
     qDebug()<< frienduserip;
     qDebug()<<frienduserport;
-    map.insert(frienduserid,&chat);
+    if(!map.contains(frienduserid))
+    {
+        map.insert(frienduserid,&chat);
+    }
     chat.exec();
-
+    map.remove(frienduserid);
 }
 
 /**
