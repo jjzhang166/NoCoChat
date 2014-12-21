@@ -218,7 +218,9 @@ void MainWindow::messageHandle(QString message)
 
         }else{
             Chat *chat=new Chat(this);
-            //chat->setIp();////////////////////////////////////////////////////////////////////////////////////////////
+            QMap<QString, QString> fipport = getFriendIp_Port(result["userid"]) ;
+            chat->setIp(fipport["ip"]);
+            chat->setPort(fipport["port"].toInt());
             chat->message(messages);
             map.insert(result["userid"],chat);
         }
@@ -310,18 +312,34 @@ void MainWindow::showChating(int row, int column)
     QString frienduserid = myfriendwidget->item(row, 1)->text() ;
     QString frienduserip = myfriendwidget->item(row, 2)->text();
     QString frienduserport = myfriendwidget->item(row, 3)->text() ;
-    Chat chat ;
+    Chat chat;
     chat.setFriendUserId(frienduserid);
     chat.setFriendUserIp(frienduserip);
     chat.setFriendUserPort(frienduserport);
     qDebug()<< frienduserid;
     qDebug()<< frienduserip;
     qDebug()<<frienduserport;
+    map.insert(frienduserid,&chat);
     chat.exec();
 
 }
 
+/**
+ * @brief MainWindow::getFriendIp_Port
+ * @param friendid
+ * @return QMap<QString, QString>
+ * key:<ip>聊天好友的ip;<port>聊天好友的端口
+ */
 QMap<QString, QString> MainWindow::getFriendIp_Port(QString friendid)
 {
-
+    QMap<QString, QString> map;
+    for (int i=0; i<addmyfriendlist.size(); i++)
+    {
+        if (friendid == addmyfriendlist[i]["fuserId"])
+        {
+            map.insert("ip", addmyfriendlist[i]["ip"]);
+            map.insert("port", addmyfriendlist[i]["port"]) ;
+        }
+    }
+    return map;
 }
