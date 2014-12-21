@@ -194,7 +194,7 @@ void Chat::sendText()
      * 字符串内容为：发送方用户名和帐号 发送时间 ｜ 发送方输入内容的字体样式 ｜ 发送方的输入内容 ｜ 样式结束字符
      */
     QString sendstr = nameid + " " + timestr + "|"
-            + "font font-family="+font.family()+"size="+QString::number(font.pointSize()) + "|"
+            + "font font-family="+font.family()+" size="+QString::number(font.pointSize()) + "|"
             + inputstr + "|"
             + "/font" ;
     QString command="<chat><userid:>"+userid+"<username:>"+username+"<value:>"+sendstr;
