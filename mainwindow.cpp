@@ -281,7 +281,13 @@ void MainWindow::setMyFriendBox()
  */
 void MainWindow::addMyFriend()
 {
-    addmyfriendlist.clear();
+    //myfriendwidget->clear();
+    int rowlen = myfriendwidget->rowCount() ;   // 获取表格中的行数
+/*    for(int len=0; len<rowlen;len++)
+    {
+        myfriendwidget->setRowCount(0);
+    }*/myfriendwidget->setRowCount(0);
+    myfriendwidget->clearContents();
     addmyfriendlist = handle->getFriendList(userId);  // 获取所有的好友列表
     QString temp[]={"fuserId","fname","ip", "port"} ;
     for (int i=0; i<addmyfriendlist.size(); i++)
