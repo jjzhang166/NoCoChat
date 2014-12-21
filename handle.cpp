@@ -184,6 +184,7 @@ QString Handle::signIn(QString userId, QString pwd,int port)
     tcp.send(command);
 //    获取服务器返回的协议，并进行相关处理，取得结果集
     QMap<QString,QString> result=getCommand(changeMessage(tcp.read()));
+    qDebug()<<result;
 //    若返回的type字段值为1则注册成功，否则注册失败
 //    遍历map
         if(result["command"]=="signinresultunsuccessful")

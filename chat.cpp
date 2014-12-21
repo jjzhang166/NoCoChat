@@ -69,14 +69,6 @@ void Chat::setFriend(QString friendid)
 {
     this->friendId=friendid;
 }
-bool Chat::getflag()
-{
-    return this->flag;
-}
-void Chat::setflag(bool flag)
-{
-    this->flag=flag;
-}
 // 组件初始化
 void Chat::init()
 {
@@ -208,7 +200,7 @@ void Chat::sendText()
     QString command="<chat><userid:>"+userid+"<username:>"+username+"<value:>"+sendstr;
     //     计算协议长度，添加协议头
         command="[length="+QString::number(command.size())+"]"+command;
-    if ("_empty_" == frienduserip && "0" == frienduserport)
+    if ("_empty_" != frienduserip && "0" != frienduserport)
     {
         bool ok;
         port = frienduserport.toInt(&ok, 10) ;
