@@ -223,6 +223,7 @@ void MainWindow::messageHandle(QString message)
             QMap<QString, QString> fipport = getFriendIp_Port(result["userid"]) ;
             chat->setIp(fipport["ip"]);
             chat->setPort(fipport["port"].toInt());
+            chat->setudp(udp);
             chat->message(messages);
             map.insert(result["userid"],chat);
         }
@@ -318,6 +319,7 @@ void MainWindow::showChating(int row, int column)
     QString frienduserip = myfriendwidget->item(row, 2)->text();
     QString frienduserport = myfriendwidget->item(row, 3)->text() ;
     Chat chat;
+    chat.setUdp(udp);
     chat.setFriendUserId(frienduserid);
     chat.setFriendUserIp(frienduserip);
     chat.setFriendUserPort(frienduserport);
