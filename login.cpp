@@ -39,7 +39,7 @@ void Login::on_ok_clicked()
         if (handle.registered(userid,username,userpwd))
         {
             QMessageBox::about(this, "消息", "恭喜您，注册成功！") ;
-            this->exec() ;
+            this->close() ;
         }else{
             QMessageBox::about(this, "消息", "对不起，该帐号已存在！") ;
             ui->user_id->setText("");
@@ -57,5 +57,5 @@ void Login::on_ok_clicked()
 // 点出取消按钮，退出本窗口
 void Login::on_cancel_clicked()
 {
-    this->exec();
+    this->close();
 }
