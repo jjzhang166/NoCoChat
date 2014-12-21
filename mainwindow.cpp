@@ -322,7 +322,7 @@ void MainWindow::addMyFriend()
 void MainWindow::on_addfriend_clicked()
 {
     AddInfo addinfo;
-    qDebug()<< userId;
+    setWindowTitle("N");
     addinfo.setUserId(userId);
     addinfo.exec();
     addMyFriend();

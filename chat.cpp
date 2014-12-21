@@ -13,7 +13,6 @@ Chat::Chat(QWidget *parent):
     alltext->resize(1000,550);
     inputtext->resize(500, 50);
     setModal(false);
-    printf("no problem");
     setComponent();
     setSize();
     setConnect();
@@ -75,11 +74,13 @@ void Chat::init()
 {
     splitter = new QSplitter(Qt::Horizontal, this);     // 水平分割窗口，把窗口分成多列-->主分割
     Lsplitter = new QSplitter(Qt::Vertical, splitter) ; // 垂直分割左边部分窗口，把窗口分割成多行
-    //Rsplitter = new QSplitter(Qt::Vertical,splitter) ;  // 垂直分割右边部分窗口，把窗口分割成多行
+    Rsplitter = new QSplitter(Qt::Vertical,splitter) ;  // 垂直分割右边部分窗口，把窗口分割成多行
     alltext = new QTextEdit ;     // 所有聊天信息显示区域
     inputtext = new QTextEdit ;   // 本地输入区域
     inputtext->setText(NULL);
     historytext = new QTextEdit ;   // 历史记录显示框
+    Rsplitter->addWidget(historytext);
+    Rsplitter->hide();
     center = new QDialog;   // 聊天对话框中间用于放置工具栏的 dialog 部件
     fontbtn = new QPushButton(center) ; // 改变字体按钮
     history = new QPushButton(center) ; // 查看历史记录按钮
@@ -156,14 +157,16 @@ void Chat::setFont()
 // 显示历史记录
 void Chat::showHistory(bool ok)
 {
-//    if (ok)
-//    {
-//        Rsplitter->resize(300, 400);
-//        historytext->resize(300, 400);
-//        Rsplitter->addWidget(historytext);
-//    }else{
-//        Rsplitter->resize(0,400);
-//    }
+    if (ok)
+    {
+        resize(600,400);
+        Rsplitter->resize(300, 400);
+        historytext->resize(300, 400);
+        Rsplitter->show();
+    }else{
+        Rsplitter->hide();
+        Rsplitter->resize(0,400);
+    }
 }
 void Chat::setPort(int p)
 {
@@ -173,14 +176,23 @@ void Chat::setIp(QString s)
 {
     ip=s;
 }
-// 发送聊天信息，将聊天信息发送到聊天信息框，同时将信息发送给好友
+
+/**
+ * @brief Chat::sendText
+ * 聊天信息发送按钮槽函数
+ * 功能：获取用户输入的聊天信息，当用户点击发送按钮时将使用udp协议的方式发送出去
+ */
 void Chat::sendText()
 {
     QString nameid = username + "(" + userid + ")" ;
     time = QDateTime::currentDateTime();    // 获取系统当前时间
     QString timestr = time.toString("yyyy-MM-dd hh:mm:ss") ;    // 设置当前系统时间格式并转换成字符串形式
     QString inputstr = inputtext->toPlainText() ;   // 获取输入框的聊天信息
-    // 封装聊天信息的样式
+    /**
+     * @brief str
+     * 封装聊天信息的样式
+     * 思路：通过获取用户当前输入框的字体样式，将当前样式封装成样式字符串
+     */
     QString str = "<font font-family="+font.family()+" size="+QString::number(font.pointSize())+">"+inputstr+"</font>" ;
     // 完整的聊天信息
     if (inputstr != NULL)
