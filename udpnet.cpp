@@ -16,7 +16,7 @@ int UDPNet::bindPort()
 //    初始端口从10000开始
     int p=10000;
 //    直到端口能被绑定
-    while(!(udpAccepct->bind(p,QUdpSocket::ShareAddress)))
+    while(!(udpAccepct->bind(QHostAddress::Any,p)))
     {
 //        步长为一
           p++;

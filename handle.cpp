@@ -46,7 +46,7 @@ QString Handle::changeMessage(QString message)
 QMap<QString, QString> Handle::getCommand(QString command)
 {
 //    正则规范：提取<TYPE：>信息 中的TYPE和信息
-    QString pattern="(?:<)([a-zA-Z0-9_\u4e00-\u9fa5\\w]+)(?::>)([a-zA-Z0-9_\u4e00-\u9fa5\\w\.]+)";
+    QString pattern="(?:<)([a-zA-Z0-9_\u4e00-\u9fa5\\w]+)(?::>)([a-zA-Z0-9\-\/_.=:!@#$%^&;*)(;'| \u4e00-\u9fa5\\w]+)";
 //  QString message="[length=32]<loginuser><userid:>用户名<name:>名称<password:>密码";
 
 //        使用正则规范创建正则表达式对象
