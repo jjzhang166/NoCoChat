@@ -67,18 +67,6 @@ void AddInfo::on_group_searchbtn_clicked()
 
 void AddInfo::addFriendAction()
 {
-//    QList<QTableWidgetSelectionRange> ranges=ui->group_table->selectedRanges();
-//    int count=ranges.count();
-//    for(int i=0;i<count;i++)
-//    {
-//       int topRow=ranges.at(i).topRow();
-//       int bottomRow=ranges.at(i).bottomRow();
-//       for(int j=topRow;j<=bottomRow;j++)
-//       {
-//          qDebug()<<"selectRow"<<j;
-//        }
-//    }
-    QMessageBox::about(this,"","");
     QList<QTableWidgetItem*> items=ui->friend_table->selectedItems();
     QTableWidgetItem *item=items.at(0);
     QString adduserid=item->text();//获取内容
@@ -318,36 +306,6 @@ void AddInfo::mouseReleaseEvent(QMouseEvent *e)
         menubar->show();
     }
 }
-
-// 鼠标双击按钮事件响应函数
-void AddInfo::mouseDoubleClickEvent(QMouseEvent *e)
-{
-    if(event->button() == e->button())
-    {
-//        QMenuBar *menubar = new QMenuBar(this);
-//        QMenu *addfriend = menubar->addMenu("添加好友") ;
-//        QAction *getinfo = menubar->addAction("好友信息");
-//        menubar->show();
-//        addfriend->show();
-//        QCursor cur = this->cursor();
-//        QMenu *menu = new QMenu(this);
-//        menu->addAction("添加好友");
-//        menu->addAction("好友信息");
-//        menu->exec(cur.pos());
-    }
-}
-
-// 右键菜单事件
-//void AddInfo::contextMenuEvent(QContextMenuEvent *)
-//{
-//    QCursor cur = this->cursor();
-//    QMenu *menu = new QMenu(this);
-//    //addfriend = menu->addAction("添加好友");
-//    menu->addAction("");
-
-//    menu->exec(cur.pos());
-//    connect(addfriend, SIGNAL(clicked()), this, SLOT(addFriendAction()));
-//}
 
 
 void AddInfo::on_friend_table_customContextMenuRequested(const QPoint &pos)

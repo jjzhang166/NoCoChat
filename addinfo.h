@@ -64,7 +64,6 @@ private:
     void resizeEvent(QResizeEvent *);   // 窗体大小改变事件
     void mousePressEvent(QMouseEvent *e);    // 鼠标按下事件响应函数
     void mouseReleaseEvent(QMouseEvent *e);  // 鼠标松开事件响应函数
-    void mouseDoubleClickEvent(QMouseEvent *e);  // 鼠标双击按钮事件响应函数
     //void contextMenuEvent(QContextMenuEvent *); // 右键菜单事件
 };
 
