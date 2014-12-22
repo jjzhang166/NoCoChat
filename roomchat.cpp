@@ -1,12 +1,11 @@
-#include "chat.h"
+#include "roomchat.h"
 
-Chat::Chat(QWidget *parent):
+RoomChat::RoomChat(QWidget *parent) :
     QDialog(parent)
-
 {
     init();
-    resize(500, 400);
-    setMinimumSize(500, 400);   // 设置聊天窗口最小大小为500x400
+    resize(700, 500);
+    setMinimumSize(700, 500);   // 设置聊天窗口最小大小为500x400
     setWindowFlags(Qt::WindowMinimizeButtonHint);   // 设置窗口最小化按钮
     setWindowFlags(Qt::WindowMaximizeButtonHint);   // 设置窗口最大化按钮
     splitter->setOpaqueResize(false);   // 设置为不透明
@@ -18,68 +17,86 @@ Chat::Chat(QWidget *parent):
     setConnect();
     setWindowOpacity(2);
     flag=true;
-    setWindowIcon(*new QIcon(":/img/Person.png"));
-    qDebug()<<"创建窗口";
 }
-
-Chat::~Chat()
-{
-   qDebug()<<"窗口被释放了";
-}
-void Chat::message(QString head,QString msg)
+void RoomChat::message(QString head,QString msg)
 {
     alltext->append(head);
     alltext->append(msg);
-    file.setFileName(userid+"_"+frienduserid+"_histroy.txt");
+    file.setFileName(roomid+"_"+roomname+"_histroy.txt");
     file.open(QIODevice::WriteOnly|QIODevice::Text);
     file.write(alltext->toPlainText().toAscii());
     file.close();
 }
-void Chat::setUdp(UDPNet *u)
+void RoomChat::setUdp(UDPNet *u)
 {
     udp=u;
 }
-// 设置用户昵称
-void Chat::setUserName(QString name)
+void RoomChat::setRoomId(QString id)
 {
-    username = name ;
+    roomid=id;
 }
-// 设置用户帐号(ID)
-void Chat::setUserId(QString id)
+void RoomChat::setRoomName(QString rn)
 {
-    userid = id;
+    setWindowTitle(rn);
+    roomname=rn;
 }
+void RoomChat::setRoomFriendList(QList<QMap<QString, QString> > list)
+{
+    friendlist=list;
+    creatfriendlist();
+}
+/**
+ * @brief 创建聊天室列表
+ */
+void RoomChat::setFriendBox()
+{
 
-// 要与之聊天好友的id
-void Chat::setFriendUserId(QString fuserid)
-{
-    qDebug()<<fuserid;
-    frienduserid = fuserid ;
-}
+    list->verticalHeader()->setVisible(false);  // 隐藏表头
+    list->horizontalHeader()->setVisible(false);    // 隐藏行头
 
-// 要与之聊天的好友的ip
-void Chat::setFriendUserIp(QString fuserip)
-{
-    frienduserip = fuserip ;
+    list->insertColumn(list->columnCount());    // 增加一列单元格
+    list->insertColumn(list->columnCount());    // 增加一列单元格
+    list->insertColumn(list->columnCount());    // 增加一列单元格
+    list->setColumnWidth(0, 252);     // 设置单元格的宽度为252
+    list->setEditTriggers(QAbstractItemView::NoEditTriggers); // 设置表格不可编辑属性
+    list->setSelectionBehavior(QAbstractItemView::SelectRows);    //设置表格每次选中一行
+    list->hideColumn(1);  // 隐藏第二列
+    list->hideColumn(2);  // 隐藏第三列
+    LRsplitter->addWidget(list);
 }
-
-// 要与之聊天的好友的端口
-void Chat::setFriendUserPort(QString fuserport)
+/**
+ * @brief 初始化聊天室列表
+ */
+void RoomChat::creatfriendlist()
 {
-    frienduserport = fuserport ;
-}
+    list->setRowCount(0);
+    list->clearContents();
+    QString temp[]={"userId","name"} ;
+    for (int i=0; i<friendlist.size(); i++)
+    {
+        list->insertRow(list->rowCount()); // 插入一行单元格
+        list->setRowHeight(i,50); // 设置单元格的高度为50
+        QTableWidgetItem *nameiditem = new QTableWidgetItem(friendlist[i][temp[0]]+"\n"+friendlist[i][temp[1]]);
+        QTableWidgetItem *iditem = new QTableWidgetItem(friendlist[i][temp[0]]) ;
+        QTableWidgetItem *nameitem = new QTableWidgetItem(friendlist[i][temp[1]]) ;
+        nameiditem->setIcon(QPixmap(":/img/Talkroom.png"));
+        list->setItem(i, 0, nameiditem);
+        list->setItem(i, 1, iditem);
+        list->setItem(i, 2, nameitem);
+        list->setIconSize(QSize(40,40));
 
-QString Chat::getFriend()
-{
-    return this->friendId;
+    }
 }
 // 组件初始化
-void Chat::init()
+void RoomChat::init()
 {
     splitter = new QSplitter(Qt::Horizontal, this);     // 水平分割窗口，把窗口分成多列-->主分割
-    Lsplitter = new QSplitter(Qt::Vertical, splitter) ; // 垂直分割左边部分窗口，把窗口分割成多行
-    Rsplitter = new QSplitter(Qt::Vertical,splitter) ;  // 垂直分割右边部分窗口，把窗口分割成多行
+    Lsplitter=new QSplitter(Qt::Horizontal,splitter);   //水平分割窗口->第二层分割
+    LLsplitter = new QSplitter(Qt::Vertical, Lsplitter) ; // 垂直分割左边部分窗口->第三层分割
+    LRsplitter = new QSplitter(Qt::Vertical, Lsplitter) ; // 垂直分割左边部分窗口->第三层分割
+    Rsplitter = new QSplitter(Qt::Vertical, splitter) ;  // 垂直分割右边部分窗口->第二层分割
     alltext = new QTextEdit ;     // 所有聊天信息显示区域
+    list=new QTableWidget; //所有聊天室成员
     inputtext = new QTextEdit ;   // 本地输入区域
     inputtext->setText(NULL);
     historytext = new QTextEdit ;   // 历史记录显示框
@@ -91,9 +108,8 @@ void Chat::init()
     frame = new QFrame;
     send = new QPushButton(frame) ;     // 聊天消息发送按钮
 }
-
 // 将各部件布局到窗口的函数
-void Chat::setComponent()
+void RoomChat::setComponent()
 {
     alltext->setReadOnly(true); // 设置所有聊天信息显示区域为只读，不能写
     fontbtn->setIcon(QPixmap(":/img/font.png"));
@@ -102,14 +118,14 @@ void Chat::setComponent()
     send->setText("发送");
     send->resize(70,25);
     send->move(0,0);
-    Lsplitter->addWidget(alltext);
-    Lsplitter->addWidget(center);
-    Lsplitter->addWidget(inputtext);
-    Lsplitter->addWidget(frame);
+    LLsplitter->addWidget(alltext);
+    LLsplitter->addWidget(center);
+    LLsplitter->addWidget(inputtext);
+    LLsplitter->addWidget(frame);
+    setFriendBox();
 }
-
 // 设置组件大小
-void Chat::setSize()
+void RoomChat::setSize()
 {
     float height, width;
     height = this->height();    // 获取窗口的高度
@@ -130,25 +146,23 @@ void Chat::setSize()
     frame->setMinimumHeight(25);
     splitter->resize(width, height);    // 设置分割组件的大小
 }
-
 // 连接函数
-void Chat::setConnect()
+void RoomChat::setConnect()
 {
     connect(fontbtn, SIGNAL(clicked()), this, SLOT(setFont())) ;
     connect(history, SIGNAL(clicked()), this, SLOT(showHistory())) ;
     connect(send, SIGNAL(clicked()), this, SLOT(sendText()));
 }
-
 // 事件
 // 大小改变事件
-void Chat::resizeEvent(QResizeEvent *)
+void RoomChat::resizeEvent(QResizeEvent *)
 {
     setSize();
 }
 
 // 槽函数
 // 设置字体
-void Chat::setFont()
+void RoomChat::setFont()
 {
     bool ok ;
     font = QFontDialog::getFont(&ok) ;
@@ -159,12 +173,12 @@ void Chat::setFont()
 }
 
 // 显示历史记录
-void Chat::showHistory()
+void RoomChat::showHistory()
 {
 
     if (flag)
     {
-        file.setFileName(userid+"_"+frienduserid+"_histroy.txt");
+        file.setFileName(roomid+"_"+roomname+"_histroy.txt");
         file.open(QIODevice::ReadOnly|QIODevice::Text);
         QByteArray by=file.readAll();
         this->historytext->setText(by);
@@ -180,15 +194,24 @@ void Chat::showHistory()
         update();
     }
 }
-
-
+// 设置用户昵称
+void RoomChat::setUserName(QString name)
+{
+    username = name ;
+}
+// 设置用户帐号(ID)
+void RoomChat::setUserId(QString id)
+{
+    userid = id;
+}
 /**
  * @brief Chat::sendText
  * 聊天信息发送按钮槽函数
  * 功能：获取用户输入的聊天信息，当用户点击发送按钮时将使用udp协议的方式发送出去
  */
-void Chat::sendText()
+void RoomChat::sendText()
 {
+
     QString nameid = username + "(" + userid + ")" ;
     time = QDateTime::currentDateTime();    // 获取系统当前时间
     QString timestr = time.toString("yyyy-MM-dd hh:mm:ss") ;    // 设置当前系统时间格式并转换成字符串形式
@@ -210,25 +233,30 @@ void Chat::sendText()
      * 将聊天相关的信息都封装到字符串 sendstr 中
      * 在此字符串中，“｜”将做为分割符，用于接收方以此分割此字符串
      * 字符串内容为：发送方用户名和帐号 发送时间 ｜ 发送方输入内容的字体样式 ｜ 发送方的输入内容 ｜ 样式结束字符
+     * <talkroomid:>聊天室id <talkroomname:>聊天室名
+     * <userId:> 用户名<name:>名称<ip:>_empty_<port:>0
      */
     QString sendstr = nameid + " " + timestr + "|"
             + "font font-family="+font.family()+" size="+QString::number(font.pointSize()) + "|"
             + inputstr + "|"
             + "/font" ;
-    QString command="<chat><userid:>"+userid+"<username:>"+username+"<value:>"+sendstr;
+    QString command="<roomchat><roomid:>"+roomid+"<roomname:>"+roomname+"<value:>"+sendstr;
     //     计算协议长度，添加协议头
         command="[length="+QString::number(command.size())+"]"+command;
-    if ("_empty_" != frienduserip && "0" != frienduserport)
-    {
-        bool ok;
-        port = frienduserport.toInt(&ok, 10) ;
-        udp->sendMessage(command,frienduserip,port);
-        file.setFileName(userid+"_"+frienduserid+"_histroy.txt");
-        file.open(QIODevice::WriteOnly|QIODevice::Text);
-        file.write(alltext->toPlainText().toAscii());
-        file.close();
-    }
+        qDebug()<<"send"<<friendlist.size();
+        for(int i=0;i<friendlist.size();i++)
+        {
+            qDebug()<<friendlist[i]["ip"]<<friendlist[i]["port"];
+            if ("_empty_" != friendlist[i]["ip"] && "0" != friendlist[i]["port"])
+            {
 
-
+                udp->sendMessage(command,friendlist[i]["ip"],friendlist[i]["port"].toInt());
+                qDebug()<<friendlist[i]["ip"]<<friendlist[i]["port"];
+                file.setFileName(roomid+"_"+roomname+"_histroy.txt");
+                file.open(QIODevice::WriteOnly|QIODevice::Text);
+                file.write(alltext->toPlainText().toAscii());
+                file.close();
+            }
+        }
 
 }

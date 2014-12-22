@@ -22,7 +22,7 @@ SOURCES += main.cpp \
     addinfo.cpp \
     login.cpp \
     chat.cpp \
-    history.cpp
+    roomchat.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -35,14 +35,13 @@ HEADERS  += \
     addinfo.h \
     login.h \
     chat.h \
-    history.h
+    roomchat.h
 
 FORMS    += \
     mainwindow.ui \
     signin.ui \
     addinfo.ui \
-    login.ui \
-    history.ui
+    login.ui
 
 RESOURCES += \
     images.qrc

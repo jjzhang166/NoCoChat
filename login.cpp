@@ -7,9 +7,7 @@ Login::Login(QWidget *parent) :
     ui(new Ui::Login)
 {
     ui->setupUi(this);
-    // 将窗口固定大小为 300*320 不可改变
-    setMinimumSize(300, 320);
-    setMaximumSize(300, 320);
+
 
     userInfo();
 }

@@ -38,9 +38,13 @@ public:
 //    登录处理
     QString signIn(QString userId, QString pwd,int port);
 //    获取用户列表
-    QList<QMap<QString, QString> > getUserList(QString userId);
+     QList<QMap<QString, QString> > getUserList(QString userId);
 //    获取聊天室列表
-     QList<QMap<QString,QString> >getRoomList(QString userid);
+     QList<QMap<QString,QString> >getRoomList();
+//    获取聊天室列表
+     QList<QMap<QString,QString> >getRoomList(QString roomId,QString roomName="_empty_");
+//    获取个人聊天室列表
+     QList<QMap<QString,QString> >getMyRoomList(QString userid);
 //    添加好友
     QMap<QString,QString> addFriend(QString userId, QString adduserid);
 //   创建聊天室
@@ -55,8 +59,10 @@ public:
     int requestFriendToRoom(QString friendId,QString userId,QString roomName, QString roomId);
 //    下线
     void lamdownline(QString userId);
-//离线好友申请信息的添加
-    QMap<QString,QString> reactionCacheRequest(QString userId);
+//    离线好友申请信息的添加
+    void reactionCacheRequest(QString userId);
+//    获取邀请进群离线信息
+    void reactionCacheRoomRequest(QString userId);
 
 
 signals:

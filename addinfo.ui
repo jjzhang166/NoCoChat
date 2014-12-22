@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <property name="iconSize">
     <size>
@@ -202,9 +202,9 @@
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>10</x>
        <y>20</y>
-       <width>31</width>
+       <width>81</width>
        <height>16</height>
       </rect>
      </property>
@@ -212,14 +212,14 @@
       <string notr="true">font: 12pt</string>
      </property>
      <property name="text">
-      <string>ID：</string>
+      <string>聊天室ID：</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="group_id">
      <property name="geometry">
       <rect>
-       <x>70</x>
-       <y>17</y>
+       <x>90</x>
+       <y>20</y>
        <width>181</width>
        <height>22</height>
       </rect>
@@ -234,8 +234,8 @@
     <widget class="QPushButton" name="group_searchbtn">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>17</y>
+       <x>290</x>
+       <y>30</y>
        <width>75</width>
        <height>23</height>
       </rect>
@@ -248,9 +248,9 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>52</y>
+       <y>79</y>
        <width>495</width>
-       <height>368</height>
+       <height>341</height>
       </rect>
      </property>
      <column>
@@ -263,6 +263,108 @@
        <string>群名称</string>
       </property>
      </column>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>71</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 12pt</string>
+     </property>
+     <property name="text">
+      <string>聊天室名:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="group_name">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>50</y>
+       <width>181</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 12pt</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="creatgroup">
+    <attribute name="title">
+     <string>创建群</string>
+    </attribute>
+    <widget class="QPushButton" name="c_btn">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>90</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>创建</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>30</y>
+       <width>255</width>
+       <height>52</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="styleSheet">
+         <string notr="true">font: 12pt</string>
+        </property>
+        <property name="text">
+         <string>聊天室ID：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="c_group_id">
+        <property name="styleSheet">
+         <string notr="true">font: 12pt</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="styleSheet">
+         <string notr="true">font: 12pt</string>
+        </property>
+        <property name="text">
+         <string>聊天室名:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="c_group_name">
+        <property name="styleSheet">
+         <string notr="true">font: 12pt</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
   </widget>

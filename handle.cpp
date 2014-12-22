@@ -32,7 +32,12 @@ QString Handle::changeMessage(QString message)
 //    使用字符串对象中的分割函数，并使用正则对象进行分割，0为分割前 1为分割后
     QStringList list=message.split(reg);
 //    返回相应的信息
-    return list[1];
+    if(list.size()>1){
+        return list[1];
+    }else
+    {
+        return "";
+    }
 
 
 }
@@ -279,13 +284,63 @@ QList<QMap<QString,QString> >Handle::getFriendList(QString userid)
                 return result;
 }
 /**
- * @brief 获取聊天室列表
+ * @brief 获取所有聊天室列表
+ * @return QList集合，结构如下：
+ * QList list list[i]是一个聊天室 内部为QMap QMap的内部结构为：
+ * <talkroomid:>聊天室ID<talkroomname:>聊天室名
+ */
+QList<QMap<QString,QString> >Handle::getRoomList()
+{
+            //    拼接服务器请求协议
+                QList<QMap<QString,QString> > result;
+                QString command="<findtalkroom><talkroomid:>_empty_<talkroomname:>_empty_";
+            //     计算协议长度，添加协议头
+                command="[length="+QString::number(command.size())+"]"+command;
+            //    连接服务器
+                if(tcp.tcpconnect(ip,port))
+                {
+                    //    发送协议
+                    tcp.send(command);
+                    //    获取服务器返回的协议，并进行相关处理，取得结果集
+                    result =getCommand(changeMessage(tcp.read()),"talkroomid");
+
+                }
+                return result;
+}
+/**
+ * @brief 获取所有聊天室列表
+ * @param roomId 聊天室id
+ * @param roomName 聊天室名字
+ * @return QList集合，结构如下：
+ * QList list list[i]是一个聊天室 内部为QMap QMap的内部结构为：
+ * <talkroomid:>聊天室ID<talkroomname:>聊天室名
+ */
+QList<QMap<QString,QString> >Handle::getRoomList(QString roomId, QString roomName)
+{
+            //    拼接服务器请求协议
+                QList<QMap<QString,QString> > result;
+                QString command="<findtalkroom><talkroomid:>"+roomId+"<talkroomname:>"+roomName;
+            //     计算协议长度，添加协议头
+                command="[length="+QString::number(command.size())+"]"+command;
+            //    连接服务器
+                if(tcp.tcpconnect(ip,port))
+                {
+                    //    发送协议
+                    tcp.send(command);
+                    //    获取服务器返回的协议，并进行相关处理，取得结果集
+                    result =getCommand(changeMessage(tcp.read()),"talkroomid");
+
+                }
+                return result;
+}
+/**
+ * @brief 获取个人聊天室列表
  * @param userid 登录的用户名
  * @return QList集合，结构如下：
  * QList list list[i]是一个聊天室 内部为QMap QMap的内部结构为：
  * <talkroomid:>聊天室ID<talkroomname:>聊天室名
  */
-QList<QMap<QString,QString> >Handle::getRoomList(QString userid)
+QList<QMap<QString,QString> >Handle::getMyRoomList(QString userid)
 {
             //    拼接服务器请求协议
     QList<QMap<QString,QString> > result;
@@ -309,14 +364,14 @@ QList<QMap<QString,QString> >Handle::getRoomList(QString userid)
  * @param roomid 聊天室的id
  * @return QList集合，结构如下：
  * QList list list[i]是一个成员 内部为QMap QMap的内部结构为：
- * <talkroomid:>聊天室id <talkroomname:>聊天室名<userId:> 用户名<name:>名称<ip:>(_empty_)<port:>(0)
- * ip 为(_empty_)和port为(0)时代表成员不在线 括号是必须项
+ * <talkroomid:>聊天室id <talkroomname:>聊天室名<userId:> 用户名<name:>名称<ip:>_empty_<port:>0
+ * ip 为_empty_和port为0是代表成员不在线
  */
 QList<QMap<QString,QString> >Handle::getRoomFriendList(QString userid,QString roomid)
 {
             //    拼接服务器请求协议
-    QList<QMap<QString,QString> > result;
-                QString command="<getmytalkroomuser><userid:>"+userid+"< talkroomid:>"+roomid;
+            QList<QMap<QString,QString> > result;
+                QString command="<getmytalkroomuser><userid:>"+userid+"<talkroomid:>"+roomid;
             //     计算协议长度，添加协议头
                 command="[length="+QString::number(command.size())+"]"+command;
             //    连接服务器
@@ -328,6 +383,7 @@ QList<QMap<QString,QString> >Handle::getRoomFriendList(QString userid,QString ro
                      result =getCommand(changeMessage(tcp.read()),"talkroomid");
 
                 }
+                qDebug()<<result;
                 return result;
     }
 /**
@@ -346,7 +402,7 @@ QMap<QString,QString> Handle::creatRoom(QString userId, QString roomId,QString r
 {
     //    拼接服务器请求协议
      QMap<QString,QString>  result;
-        QString command="<login talkroom><userid:>"+userId+"<talkroomid:>"+roomId+"<talkroomname:>"+roomName;
+        QString command="<logintalkroom><userid:>"+userId+"<talkroomid:>"+roomId+"<talkroomname:>"+roomName;
     //     计算协议长度，添加协议头
         command="[length="+QString::number(command.size())+"]"+command;
     //    连接服务器
@@ -357,7 +413,8 @@ QMap<QString,QString> Handle::creatRoom(QString userId, QString roomId,QString r
             //    获取服务器返回的协议，并进行相关处理，取得结果集
             result=getCommand(changeMessage(tcp.read()));
 
-        }return result;
+        }
+        return result;
 }
 /**
  * @brief 加入聊天室函数
@@ -383,7 +440,8 @@ QMap<QString,QString> Handle::addRoom(QString userId, QString roomId)
             //    获取服务器返回的协议，并进行相关处理，取得结果集
             result=getCommand(changeMessage(tcp.read()));
 
-        } return result;
+        }
+        return result;
 }
 /**
  * @brief 邀请某人加入聊天室
@@ -460,11 +518,11 @@ void Handle::lamdownline(QString userId)
  * 返回的命令：
  * <fromuserid:>用户名(A)<fromname:>名称(A)<ip:>ip<port:>port<type>是否同意加好友
  */
-QMap<QString,QString> Handle::reactionCacheRequest(QString userId)
+void Handle::reactionCacheRequest(QString userId)
 {
         QMap<QString,QString>  result;
 //     拼接服务器请求协议
-         QString command="< getfriendscache:><userid:>"+userId;
+         QString command="<getfriendscache><userid:>"+userId;
 //    计算协议长度，添加协议头
          command="[length="+QString::number(command.size())+"]"+command;
 //    连接服务器
@@ -474,23 +532,70 @@ QMap<QString,QString> Handle::reactionCacheRequest(QString userId)
              tcp.send(command);
              //    获取服务器返回的协议，并进行相关处理，取得结果集
              result=getCommand(changeMessage(tcp.read()));
-             QString text="用户："+result["fromname"]+"申请添加你为好友,请问是否同意？";
-             QString command_1="";
-             if(QMessageBox::question(window,"好友申请",text,QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
-             {
-                 command_1="<adduserfriendback><userId:>"+result["fromuserid"]+"<fromuserid:>"+userId+"<type:>1";
-                 result.insert("type","1");
-             }else{
-                 command_1="<adduserfriendback><userId:>"+result["fromuserid"]+"<fromuserid:>"+userId+"<type:>0";
-                 result.insert("type","0");
-             }
-             if(tcp.tcpconnect(ip,port)){
-                 tcp.send(command_1);
-                 tcp.read();
+             qDebug()<<result;
+             if(result.contains("command")){
+                 if(result["command"]=="addyou")
+                 {
+                     QString text="用户："+result["fromname"]+"申请添加你为好友,请问是否同意？";
+                     QString command_1="";
+                     if(QMessageBox::question(window,"好友申请",text,QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
+                     {
+                         command_1="<adduserfriendback><userId:>"+result["fromuserid"]+"<fromuserid:>"+userId+"<type:>1";
+                         result.insert("type","1");
+                     }else{
+                         command_1="<adduserfriendback><userId:>"+result["fromuserid"]+"<fromuserid:>"+userId+"<type:>0";
+                         result.insert("type","0");
+                     }
+                     if(tcp.tcpconnect(ip,port)){
+                         tcp.send(command_1);
+                         tcp.read();
+                     }
+                 }
              }
 
          }
-         return result;
+}
+/**
+ * @brief 获取邀请进群信息
+ * @param userId 登录的好友号
+ * @return
+ * 返回的命令：
+ */
+void Handle::reactionCacheRoomRequest(QString userId)
+{
+    QMap<QString,QString>  result;
+//     拼接服务器请求协议
+     QString command="<gettalkroomfriendscache><userid:>"+userId;
+//    计算协议长度，添加协议头
+     command="[length="+QString::number(command.size())+"]"+command;
+//    连接服务器
+     if (tcp.tcpconnect(ip,port))
+     {
+         //    发送协议
+         tcp.send(command);
+         //    获取服务器返回的协议，并进行相关处理，取得结果集
+         result=getCommand(changeMessage(tcp.read()));
+         if(result.contains("command")){
+             if(result["command"]=="addtalkroomfriendyou")
+             {
+                 QString text="用户："+result["fromname"]+"("+result["fromid"]+")"+"邀请你加入"+result["talkroomname"]+"("+result["talkroomid"]+")聊天室"+",请问是否同意？";
+                 QString type="0";
+                 if(QMessageBox::question(window,"好友申请",text,QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
+                 {
+                     type="1";
+                 }else{
+                     type="0";
+                 }
+                 if(tcp.tcpconnect(ip,port)){
+                     QString command_1="<addtalkroomfriendback><userid:>"+result["fromid"]+
+                             "<fromuserid:>"+userId+"<type:>"+type+"<talkroomid:>"+result["talkroomid"];
+                     tcp.send(command_1);
+                     tcp.read();
+                 }
+             }
+         }
+
+     }
 }
 void Handle::setWindow(QMainWindow *m)
 {

@@ -12,10 +12,8 @@
 #include <QDateTime>
 #include "udpnet.h"
 #include <QFontDialog>
-
-namespace Ui {
-class Chat;
-}
+#include <QFile>
+#include <QTextStream>
 
 class Chat : public QDialog
 {
@@ -42,7 +40,8 @@ public:
     QFont font ;    // 字体
     QFrame *frame ;
     QDateTime time; // 用于获取当前系统时间的对象
-
+    QFile file;
+    QTextStream *textStream;
     void setUserName(QString name) ;    // 设置用户昵称
     void setUserId(QString id); // 设置用户帐号(ID)
     void setFriendUserId(QString fuserid) ;
@@ -60,10 +59,7 @@ public:
     void message(QString head, QString msg);
     void setFriend(QString friendid);
     QString getFriend();
-    void setflag(bool flag);
-    bool getflag();
-    void setPort(int p);
-    void setIp(QString s);
+
 
 signals:
 private:
@@ -71,10 +67,11 @@ private:
     QString friendId;
     int port;
     QString ip;
+    bool flag;
 public slots:
 
     void setFont() ;    // 设置字体
-    void showHistory(bool) ;    // 显示历史记录
+    void showHistory() ;    // 显示历史记录
     void sendText() ;   // 发送聊天信息
 
 

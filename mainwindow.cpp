@@ -13,14 +13,14 @@ MainWindow::MainWindow(QWidget *parent) :
     handle->setWindow(this);
     udp=new UDPNet();
     port =udp->bindPort();
-
     sign.setHandle(handle);
     sign.setPort(port);
     trayIcon=new QSystemTrayIcon(this);
     trayIcon->setIcon(QIcon(":/img/SiseChat.png"));
-    trayIcon->setToolTip("NoCo_Chat,逗比做的聊天软件");//定义一个系统托盘图标并设置图标的提示语
     trayIcon->show();
     sign.show();
+    myRoomwidget = new QTableWidget;
+    connect(myRoomwidget,SIGNAL(cellDoubleClicked(int,int)), this, SLOT(showRoomting(int,int)));
     myfriendwidget = new QTableWidget;
     connect(myfriendwidget,SIGNAL(cellDoubleClicked(int,int)), this, SLOT(showChating(int,int)));
     //创建监听行为
@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
         trayIconMenu->addAction(quitAction);
         trayIcon->setContextMenu(trayIconMenu);
         setMyFriendBox();
+        setMyGroupBox();
     connect(trayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(Maction(QSystemTrayIcon::ActivationReason)));
     if(sign.exec()==QDialog::Accepted)
     {
@@ -51,8 +52,11 @@ MainWindow::MainWindow(QWidget *parent) :
        times->setInterval(650);
        connect(times,SIGNAL(timeout()),this,SLOT(changeico()));
        addMyFriend();
+       addMyRoom();
        show();
        trayIcon->showMessage("欢迎！","欢迎"+username+"你回来！");
+       handle->reactionCacheRequest(userId);
+       handle->reactionCacheRoomRequest(userId);
 
     }
     else
@@ -140,6 +144,42 @@ void MainWindow::setUdp(UDPNet u)
 {
     this->udp=&u;
 }
+QString MainWindow::findRoomName(QString id)
+{
+    for(int i=0;i<myroomlist.size();i++)
+    {
+        if(myroomlist[i]["talkroomid"]==id)
+        {
+            return myroomlist[i]["talkroomname"];
+        }
+    }
+}
+/**
+ * @brief 回应申请进入聊天室
+ * @param command
+ * <addtalkroominvite><userid:>请求者id<name:>请求者名字<talkroomid:>群id<ip:>ip<port:>port
+ * @return
+ * <addtalkroominviteback><userid:>请求者id<talkroomid:>群id<talkroomname:>群名称<fromuserid:>被请求者id<type:>0拒绝1同意
+ */
+void MainWindow::reactionApplyTalkRoom(QMap<QString, QString> command)
+{
+    QString text="用户："+command["name"]+"申请加入聊天室："+findRoomName(command["talkroomid"])+",请问是否同意？";
+    QString type="";
+    if(QMessageBox::question(this,"进群申请",text,QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes)==QMessageBox::Yes)
+    {
+            type="1";
+    }else{
+            type="0";
+    }
+    //     拼接服务器请求协议
+             QString commands="<addtalkroominviteback><userid:>"+command["userid"]+"<talkroomid:>"+command["talkroomid"]+
+                     "<talkroomname:>"+findRoomName(command["talkroomid"])+"<fromuserid:>"+userId+"<type:>"+type;
+    //    计算协议长度，添加协议头
+             commands="[length="+QString::number(commands.size())+"]"+commands;
+    //    发送协议
+             udp->sendMessage(commands);
+//             后续处理
+}
 /**
  * @brief 回应邀请进入聊天室
  * @param command
@@ -206,6 +246,38 @@ void MainWindow::messageHandle(QString message)
         reactionTalkRoom(result);
         addMyFriend();
     }
+//    打开群聊窗口
+    if(command=="roomchat")
+    {
+
+
+        QString value="";
+        QStringList temp=result["value"].split('|');
+        temp[1]="<"+temp[1]+">";
+        temp[3]="<"+temp[3]+">";
+        for(int i=1;i<temp.size();i++)
+        {
+            value+=temp[i];
+        }
+        if(roommap.contains(result["roomid"]))
+        {
+            roommap[result["roomid"]]->message(temp[0],value);
+            roommap[result["roomid"]]->showNormal();
+        }else{
+            RoomChat *roomchat=new RoomChat();
+            roomchat->setRoomFriendList(myroomfriendlist[result["roomid"]]);
+            roomchat->setRoomId(result["roomid"]);
+            roomchat->setRoomName(result["roomuser"]);
+            roomchat->setUdp(udp);
+            roomchat->message(temp[0],value);;
+            roommap.insert(result["roomid"],roomchat);
+            roomchat->setWindowTitle("聊天室:"+result["roomname"]+"("+result["roomid"]+")");
+            roomchat->setUserId(userId);
+            roomchat->setUserName(username);
+            roomchat->showNormal();
+        }
+        //map.remove(result["userid"]);
+}
 //        打开聊天窗口
     if(command=="chat")
     {
@@ -219,23 +291,23 @@ void MainWindow::messageHandle(QString message)
         {
             value+=temp[i];
         }
-        qDebug()<<map<<temp;
         if(map.contains(result["userid"]))
         {
-            qDebug()<<"添加信息";
             map[result["userid"]]->message(temp[0],value);
             map[result["userid"]]->showNormal();
         }else{
-            qDebug()<<"创建窗口";
             Chat *chat=new Chat();
-            QMap<QString, QString> fipport = getFriendIp_Port(result["userid"]) ;
-            chat->setIp(fipport["ip"]);
-            chat->setPort(fipport["port"].toInt());
+            QMap<QString, QString> fipport = getFriendIp_Port(result["userid"]);
+            chat->setFriendUserIp(fipport["ip"]);
+            chat->setFriendUserPort(fipport["port"]);
+            chat->setFriendUserId(result["userid"]);
+            chat->setUserId(userId);
+            chat->setUserName(username);
             chat->setUdp(udp);
             chat->message(temp[0],value);;
             map.insert(result["userid"],chat);
+            chat->setWindowTitle("好友:"+result["username"]+"("+result["userid"]+")");
             chat->showNormal();
-            qDebug()<<"窗口被释放了";
         }
         //map.remove(result["userid"]);
 }
@@ -243,6 +315,18 @@ void MainWindow::messageHandle(QString message)
     if(command=="addyou")
     {
         reactionFriendRequest(result);
+    }
+//    弹出系统窗口，添加好友反馈信息
+    if(command=="adduserfriendback")
+    {
+           /*<userId:>请求方id<fromuserid:>被请求方id<type:>1(同意)或者<type:>0(不同意)<ip:>ip<port:>端口*/
+        if(result["type"]=="1")
+        {
+           trayIcon->showMessage("系统信息","成功添加好友:"+result["fromuserid"]);
+        }else
+        {
+            trayIcon->showMessage("系统信息","用户:"+result["fromuserid"]+"拒绝添加你为好友");
+        }
     }
 //        弹出系统窗口，某人已下线，并把其项目置为enable（false）
     if(command=="youfrienddownline")
@@ -259,12 +343,81 @@ void MainWindow::messageHandle(QString message)
 //        弹出系统窗口，某人进入群,并把其添加到群友列表
     if(command=="addtalkroomfriendback2")
     {
-      reactionTalkRoom(result);
+      /*<fromid:>id（B）<fromname:>名称(B)<ip:>ip<port:>port<talkroomid:>聊天室ID */
+      trayIcon->showMessage("群消息","用户:"+result["fromname"]+"加入聊天室"+result["talkroomid"]);
     }
+    if(command=="addtalkroominvite")
+    {
+        reactionApplyTalkRoom(result);
+        myroomfriendlist[result["talkroomid"]]=handle->getRoomFriendList(userId,result["talkroomid"]);
+        if(roommap.contains(result["talkroomid"])){
+            roommap[result["talkroomid"]]->setRoomFriendList(myroomfriendlist[result["talkroomid"]]);
+        }
+    }
+    if(command=="addtalkroominviteback")
+    {
+        if(result["type"]=="1")
+        {
+            trayIcon->showMessage("群消息","聊天室"+result["talkroomname"]+"("+result["talkroomid"]+")同意你的加入");
+            addMyRoom();
+        }
+        else
+        {
+            trayIcon->showMessage("群消息","聊天室"+result["talkroomname"]+"("+result["talkroomid"]+")拒绝你的加入");
+        }
+    }
+    if(command=="addtalkroomfriendback")
+    {
+//        <fromid:>id（B）<fromname:>名称(B) <type:>1(同意) <ip:>ip<port:>port<talkroomid:>聊天室ID
+//        或者<type:>0(不同意) <talkroomid:>聊天室ID
+        if(result["type"]=="1")
+        {
+            trayIcon->showMessage("群消息","用户:"+result["fromname"]+"加入聊天室"+result["talkroomid"]);
+            myroomfriendlist[result["talkroomid"]]=handle->getRoomFriendList(userId,result["talkroomid"]);
+            roommap[result["talkroomid"]]->setRoomFriendList(myroomfriendlist[result["talkroomid"]]);
+        }else{
+            trayIcon->showMessage("群消息","用户:"+result["fromname"]+"拒绝加入聊天室"+result["talkroomid"]);
+        }
+
+    }
+    if(command=="yougfriendsignin")
+    {
+        myroomfriendlist[result["talkroomid"]]=handle->getRoomFriendList(userId,result["talkroomid"]);
+        if(roommap.contains(result["talkroomid"])){
+            roommap[result["talkroomid"]]->setRoomFriendList(myroomfriendlist[result["talkroomid"]]);
+        }
+    }
+    if(command=="yougfrienddownline")
+    {
+        myroomfriendlist[result["talkroomid"]]=handle->getRoomFriendList(userId,result["talkroomid"]);
+        if(roommap.contains(result["talkroomid"])){
+            roommap[result["talkroomid"]]->setRoomFriendList(myroomfriendlist[result["talkroomid"]]);
+        }
+    }
+}
+/**
+ * @brief 创建聊天室列表
+ */
+void MainWindow::setMyGroupBox()
+{
+
+    myRoomwidget->verticalHeader()->setVisible(false);  // 隐藏表头
+    myRoomwidget->horizontalHeader()->setVisible(false);    // 隐藏行头
+
+    myRoomwidget->insertColumn(myRoomwidget->columnCount());    // 增加一列单元格
+    myRoomwidget->insertColumn(myRoomwidget->columnCount());    // 增加一列单元格
+    myRoomwidget->insertColumn(myRoomwidget->columnCount());    // 增加一列单元格
+    myRoomwidget->setColumnWidth(0, 252);     // 设置单元格的宽度为252
+    myRoomwidget->setEditTriggers(QAbstractItemView::NoEditTriggers); // 设置表格不可编辑属性
+    myRoomwidget->setSelectionBehavior(QAbstractItemView::SelectRows);    //设置表格每次选中一行
+    myRoomwidget->hideColumn(1);  // 隐藏第二列
+    myRoomwidget->hideColumn(2);  // 隐藏第三列
+    roombox = new QVBoxLayout(ui->mygroup);
+    roombox->setMargin(0);  // 设置边距为0
 }
 
 /**
- * @brief MainWindow::setMyFriendBox
+ * @brief 创建好友列表
  */
 void MainWindow::setMyFriendBox()
 {
@@ -276,28 +429,62 @@ void MainWindow::setMyFriendBox()
     myfriendwidget->insertColumn(myfriendwidget->columnCount());    // 增加一列单元格
     myfriendwidget->insertColumn(myfriendwidget->columnCount());    // 增加一列单元格
     myfriendwidget->insertColumn(myfriendwidget->columnCount());    // 增加一列单元格
+    myfriendwidget->insertColumn(myfriendwidget->columnCount());    // 增加一列单元格
     myfriendwidget->setColumnWidth(0, 252);     // 设置单元格的宽度为252
     myfriendwidget->setEditTriggers(QAbstractItemView::NoEditTriggers); // 设置表格不可编辑属性
     myfriendwidget->setSelectionBehavior(QAbstractItemView::SelectRows);    //设置表格每次选中一行
     myfriendwidget->hideColumn(1);  // 隐藏第二列
     myfriendwidget->hideColumn(2);  // 隐藏第三列
     myfriendwidget->hideColumn(3);  // 隐藏第四列
+    myfriendwidget->hideColumn(4);  // 隐藏第五列
 
     lay = new QVBoxLayout(ui->myfriend);
     lay->setMargin(0);  // 设置边距为0
 }
+/**
+ * @brief 初始化聊天室列表
+ */
+void MainWindow::addMyRoom()
+{
+    //myfriendwidget->clear();
+/*    for(int len=0; len<rowlen;len++)
+    {
+        myfriendwidget->setRowCount(0);
+    }*/
+    myRoomwidget->setRowCount(0);
+    myRoomwidget->clearContents();
+    myroomlist = handle->getMyRoomList(userId);  // 获取所有的聊天室列表
+//    <talkroomid:>聊天室ID<talkroomname:>聊天室名
+    QString temp[]={"talkroomid","talkroomname"} ;
+    for (int i=0; i<myroomlist.size(); i++)
+    {
+        myRoomwidget->insertRow(myRoomwidget->rowCount()); // 插入一行单元格
+        myRoomwidget->setRowHeight(i,50); // 设置单元格的高度为50
+        QTableWidgetItem *nameiditem = new QTableWidgetItem(myroomlist[i][temp[0]]+"\n"+myroomlist[i][temp[1]]);
+        QTableWidgetItem *iditem = new QTableWidgetItem(myroomlist[i][temp[0]]) ;
+        QTableWidgetItem *nameitem = new QTableWidgetItem(myroomlist[i][temp[1]]) ;
+        nameiditem->setIcon(QPixmap(":/img/Talkroom.png"));
+        myRoomwidget->setItem(i, 0, nameiditem);
+        myRoomwidget->setItem(i, 1, iditem);
+        myRoomwidget->setItem(i, 2, nameitem);
+        myRoomwidget->setIconSize(QSize(40,40));
+        roombox->addWidget(myRoomwidget); // 将一个表格放进我的群抽屉中
+        qDebug()<<"id"+myroomlist[i][temp[0]];
+        myroomfriendlist.insert(myroomlist[i][temp[0]],handle->getRoomFriendList(userId,myroomlist[i][temp[0]]));
+    }
+}
 
 /**
- * @brief MainWindow::addMyFriend
+ * @brief 初始化好友列表
  */
 void MainWindow::addMyFriend()
 {
     //myfriendwidget->clear();
-    int rowlen = myfriendwidget->rowCount() ;   // 获取表格中的行数
 /*    for(int len=0; len<rowlen;len++)
     {
         myfriendwidget->setRowCount(0);
-    }*/myfriendwidget->setRowCount(0);
+    }*/
+    myfriendwidget->setRowCount(0);
     myfriendwidget->clearContents();
     addmyfriendlist = handle->getFriendList(userId);  // 获取所有的好友列表
     QString temp[]={"fuserId","fname","ip", "port"} ;
@@ -307,13 +494,21 @@ void MainWindow::addMyFriend()
         myfriendwidget->setRowHeight(i,50); // 设置单元格的高度为50
         QTableWidgetItem *nameiditem = new QTableWidgetItem(addmyfriendlist[i][temp[0]]+"\n"+addmyfriendlist[i][temp[1]]);
         QTableWidgetItem *iditem = new QTableWidgetItem(addmyfriendlist[i][temp[0]]) ;
+        QTableWidgetItem *nameitem = new QTableWidgetItem(addmyfriendlist[i][temp[1]]) ;
         QTableWidgetItem *ipitem = new QTableWidgetItem(addmyfriendlist[i][temp[2]]) ;
         QTableWidgetItem *portitem = new QTableWidgetItem(addmyfriendlist[i][temp[3]]) ;
-        nameiditem->setIcon(QPixmap(":/img/Person.png"));
+        if((addmyfriendlist[i][temp[2]]=="_empty_")||(addmyfriendlist[i][temp[3]]=="0"))
+        {
+            nameiditem->setIcon(QPixmap(":/img/Person_black.png"));
+        }else
+        {
+            nameiditem->setIcon(QPixmap(":/img/Person.png"));
+        }
         myfriendwidget->setItem(i, 0, nameiditem);
         myfriendwidget->setItem(i, 1, iditem);
         myfriendwidget->setItem(i, 2, ipitem);
         myfriendwidget->setItem(i, 3, portitem);
+        myfriendwidget->setItem(i, 4, nameitem);
         myfriendwidget->setIconSize(QSize(40,40));
         lay->addWidget(myfriendwidget); // 将一个表格放进我的好友抽屉中
     }
@@ -327,29 +522,60 @@ void MainWindow::on_addfriend_clicked()
     addinfo.exec();
     addMyFriend();
 }
+/**
+ * @brief 打开群聊窗口
+ * @param row
+ * @param column
+ */
+void MainWindow::showRoomting(int row, int column)
+{
+    column=0;
+    if(!map.contains("frienduserid"))
+    {
+        qDebug()<<myroomfriendlist;
+        RoomChat *roomchat=new RoomChat;
+        roomchat->setRoomId(myRoomwidget->item(row,1)->text());
+        roomchat->setRoomName(myRoomwidget->item(row,2)->text());
+        roomchat->setUdp(udp);
+        roomchat->setUserId(userId);
+        roomchat->setUserName(username);
+        roomchat->setRoomFriendList(myroomfriendlist[myRoomwidget->item(row,1)->text()]);
+        roommap.insert(myRoomwidget->item(row,1)->text(),roomchat);
+        roomchat->setWindowTitle("聊天室:"+myRoomwidget->item(row,2)->text()+"("+myRoomwidget->item(row,1)->text()+")");
+        roomchat->showNormal();
+    }
 
+}
+/**
+ * @brief 打开私聊窗口
+ * @param row
+ * @param column
+ */
 void MainWindow::showChating(int row, int column)
 {
-//    QList<QTableWidgetItem*> items = myfriendwidget->selectedItems() ;
-//    QTableWidgetItem *item = items.at(1);
-    QString frienduserid = myfriendwidget->item(row, 1)->text() ;
-    QString frienduserip = myfriendwidget->item(row, 2)->text();
-    QString frienduserport = myfriendwidget->item(row, 3)->text() ;
-    Chat *chat=new Chat();
-    chat->setUserName(username);
-    chat->setUserId(userId);
-    chat->setUdp(udp);
-    chat->setFriendUserId(frienduserid);
-    chat->setFriendUserIp(frienduserip);
-    chat->setFriendUserPort(frienduserport);
-    qDebug()<< frienduserid;
-    qDebug()<< frienduserip;
-    qDebug()<<frienduserport;
-    if(!map.contains(frienduserid))
+    column=0;
+    if(!map.contains("frienduserid"))
     {
+
+        QString frienduserid = myfriendwidget->item(row, 1)->text() ;
+        QString frienduserip = myfriendwidget->item(row, 2)->text();
+        QString frienduserport = myfriendwidget->item(row, 3)->text() ;
+        QString friendusername= myfriendwidget->item(row,4)->text();
+        Chat *chat=new Chat();
+        chat->setUserName(username);
+        chat->setUserId(userId);
+        chat->setUdp(udp);
+        chat->setFriendUserId(frienduserid);
+        chat->setFriendUserIp(frienduserip);
+        chat->setFriendUserPort(frienduserport);
+        qDebug()<< frienduserid;
+        qDebug()<< frienduserip;
+        qDebug()<<frienduserport;
         map.insert(frienduserid,chat);
+        chat->setWindowTitle("好友:"+friendusername+"("+frienduserid+")");
+        chat->showNormal();
     }
-   chat->showNormal();
+
 }
 
 /**
