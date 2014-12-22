@@ -9,6 +9,7 @@ Signin::Signin(QWidget *parent) :
 {
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("utf8"));
     ui->setupUi(this);
+
 }
 
 Signin::~Signin()

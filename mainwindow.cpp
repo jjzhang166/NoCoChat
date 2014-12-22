@@ -262,6 +262,7 @@ void MainWindow::messageHandle(QString message)
         if(roommap.contains(result["roomid"]))
         {
             roommap[result["roomid"]]->message(temp[0],value);
+            qDebug()<<"message";
             roommap[result["roomid"]]->showNormal();
         }else{
             RoomChat *roomchat=new RoomChat();

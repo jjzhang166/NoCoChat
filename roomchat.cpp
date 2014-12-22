@@ -112,6 +112,7 @@ void RoomChat::init()
 void RoomChat::setComponent()
 {
     alltext->setReadOnly(true); // 设置所有聊天信息显示区域为只读，不能写
+    historytext->setReadOnly(true); // 设置只读属性
     fontbtn->setIcon(QPixmap(":/img/font.png"));
     fontbtn->move(0,0);
     history->setText("历史记录");
@@ -227,6 +228,7 @@ void RoomChat::sendText()
     {
         alltext->append(nameid+" "+timestr);
         alltext->append(str);
+        qDebug()<< str+"123123";
         inputtext->setText(NULL);
     }
     /**
@@ -243,15 +245,12 @@ void RoomChat::sendText()
     QString command="<roomchat><roomid:>"+roomid+"<roomname:>"+roomname+"<value:>"+sendstr;
     //     计算协议长度，添加协议头
         command="[length="+QString::number(command.size())+"]"+command;
-        qDebug()<<"send"<<friendlist.size();
         for(int i=0;i<friendlist.size();i++)
         {
-            qDebug()<<friendlist[i]["ip"]<<friendlist[i]["port"];
             if ("_empty_" != friendlist[i]["ip"] && "0" != friendlist[i]["port"])
             {
 
                 udp->sendMessage(command,friendlist[i]["ip"],friendlist[i]["port"].toInt());
-                qDebug()<<friendlist[i]["ip"]<<friendlist[i]["port"];
                 file.setFileName(roomid+"_"+roomname+"_histroy.txt");
                 file.open(QIODevice::WriteOnly|QIODevice::Text);
                 file.write(alltext->toPlainText().toAscii());

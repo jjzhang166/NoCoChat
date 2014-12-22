@@ -86,6 +86,9 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
    <property name="styleSheet">
     <string notr="true">font: 75 12pt &quot;新宋体&quot;;</string>
    </property>

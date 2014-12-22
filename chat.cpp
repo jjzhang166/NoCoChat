@@ -53,7 +53,6 @@ void Chat::setUserId(QString id)
 // 要与之聊天好友的id
 void Chat::setFriendUserId(QString fuserid)
 {
-    qDebug()<<fuserid;
     frienduserid = fuserid ;
 }
 
@@ -96,6 +95,7 @@ void Chat::init()
 void Chat::setComponent()
 {
     alltext->setReadOnly(true); // 设置所有聊天信息显示区域为只读，不能写
+    historytext->setReadOnly(true); // 设置历史记录区域文本只读属性
     fontbtn->setIcon(QPixmap(":/img/font.png"));
     fontbtn->move(0,0);
     history->setText("历史记录");

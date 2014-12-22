@@ -177,7 +177,20 @@ void AddInfo::printFriendInfo(QString name, QString id)
             for (j=0; j<5; j++)
             {
                 // 将用户信息输出到第 i 行，第 j 列单元格中
-                ui->friend_table->setItem(i, j, new QTableWidgetItem(friendlist[i][temp[j]]));
+                if (temp[j] == "sex")
+                {
+                    if (friendlist[i][temp[j]] == "0")
+                    {
+                        ui->friend_table->setItem(i, j, new QTableWidgetItem("保密")) ;
+                    }else if(friendlist[i][temp[j]] == "1"){
+                        ui->friend_table->setItem(i, j, new QTableWidgetItem("男")) ;
+                    }else if (friendlist[i][temp[j]] == "2") {
+                         ui->friend_table->setItem(i, j, new QTableWidgetItem("女")) ;
+                    }
+                }else{
+                    ui->friend_table->setItem(i, j, new QTableWidgetItem(friendlist[i][temp[j]]));
+                }
+
             }
         }
     }else if(name != NULL && name != "" && (id == NULL || id == "")){
@@ -193,8 +206,21 @@ void AddInfo::printFriendInfo(QString name, QString id)
                 for(j=0; j<5; j++)
                 {
                     // 将用户信息输出到第 i 行，第 j 列单元格中
-                    ui->friend_table->setItem(i, j, new QTableWidgetItem(friendlist[i][temp[j]]));
+                    if (temp[j] == "sex")
+                    {
+                        if (friendlist[i][temp[j]] == "0")
+                        {
+                            ui->friend_table->setItem(i, j, new QTableWidgetItem("保密")) ;
+                        }else if(friendlist[i][temp[j]] == "1"){
+                            ui->friend_table->setItem(i, j, new QTableWidgetItem("男")) ;
+                        }else if (friendlist[i][temp[j]] == "2") {
+                             ui->friend_table->setItem(i, j, new QTableWidgetItem("女")) ;
+                        }
+                    }else{
+                        ui->friend_table->setItem(i, j, new QTableWidgetItem(friendlist[i][temp[j]]));
+                    }
                     count++;
+
                 }
             }
         }
@@ -216,7 +242,19 @@ void AddInfo::printFriendInfo(QString name, QString id)
                 for(j=0; j<5; j++)
                 {
                     // 将用户信息输出到第 i 行，第 j 列单元格中
-                    ui->friend_table->setItem(i, j, new QTableWidgetItem(friendlist[i][temp[j]]));
+                    if (temp[j] == "sex")
+                    {
+                        if (friendlist[i][temp[j]] == "0")
+                        {
+                            ui->friend_table->setItem(i, j, new QTableWidgetItem("保密")) ;
+                        }else if(friendlist[i][temp[j]] == "1"){
+                            ui->friend_table->setItem(i, j, new QTableWidgetItem("男")) ;
+                        }else if (friendlist[i][temp[j]] == "2") {
+                             ui->friend_table->setItem(i, j, new QTableWidgetItem("女")) ;
+                        }
+                    }else{
+                        ui->friend_table->setItem(i, j, new QTableWidgetItem(friendlist[i][temp[j]]));
+                    }
                     count++;
                 }
             }
@@ -238,7 +276,19 @@ void AddInfo::printFriendInfo(QString name, QString id)
                 for(j=0; j<5; j++)
                 {
                     // 将用户信息输出到第 i 行，第 j 列单元格中
-                    ui->friend_table->setItem(i, j, new QTableWidgetItem(friendlist[i][temp[j]]));
+                    if (temp[j] == "sex")
+                    {
+                        if (friendlist[i][temp[j]] == "0")
+                        {
+                            ui->friend_table->setItem(i, j, new QTableWidgetItem("保密")) ;
+                        }else if(friendlist[i][temp[j]] == "1"){
+                            ui->friend_table->setItem(i, j, new QTableWidgetItem("男")) ;
+                        }else if (friendlist[i][temp[j]] == "2") {
+                             ui->friend_table->setItem(i, j, new QTableWidgetItem("女")) ;
+                        }
+                    }else{
+                        ui->friend_table->setItem(i, j, new QTableWidgetItem(friendlist[i][temp[j]]));
+                    }
                     count++;
                 }
             }
